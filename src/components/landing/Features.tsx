@@ -1,10 +1,19 @@
+import { Card, CardContent } from "@/components/ui/card";
+
 const features = [
   {
-    icon: "🤖",
-    title: "AI 멀티 페르소나",
+    icon: "🎙️",
+    title: "AI 멀티 캐스터",
     description:
-      "실황 캐스터, 전문 해설위원, 엔터테이너까지. 2~3명의 AI가 각자의 개성으로 경기를 중계합니다.",
+      "실황 캐스터, 해설위원, 엔터테이너까지. 3명의 AI가 동네 축구를 프로 예능처럼 중계합니다.",
     gradient: "from-blue-500 to-cyan-400",
+  },
+  {
+    icon: "📱",
+    title: "스마트폰 하나로",
+    description:
+      "경기장 중앙에 스마트폰만 세워두세요. 별도 장비 없이 프로급 중계가 시작됩니다.",
+    gradient: "from-purple-500 to-pink-400",
   },
   {
     icon: "⚡",
@@ -14,31 +23,24 @@ const features = [
     gradient: "from-amber-500 to-orange-400",
   },
   {
-    icon: "📱",
-    title: "스마트폰 하나로",
-    description:
-      "별도의 장비 없이 스마트폰 카메라만으로 프로급 중계를 시작할 수 있습니다.",
-    gradient: "from-purple-500 to-pink-400",
-  },
-  {
     icon: "🎬",
-    title: "자동 숏폼 생성",
+    title: "자동 하이라이트",
     description:
-      "하이라이트 장면을 자동으로 편집하여 바이럴 숏폼 영상을 생성합니다.",
+      "주요 장면을 자동으로 편집하여 SNS에 바로 올릴 수 있는 숏폼 영상을 생성합니다.",
     gradient: "from-green-500 to-emerald-400",
   },
   {
     icon: "🔊",
-    title: "자연스러운 TTS",
+    title: "자연스러운 AI 음성",
     description:
-      "최신 음성 합성 기술로 감정이 살아있는 자연스러운 캐스팅 음성을 제공합니다.",
+      "감정이 살아있는 자연스러운 캐스팅 음성으로 경기 몰입감을 높입니다.",
     gradient: "from-red-500 to-rose-400",
   },
   {
-    icon: "☁️",
-    title: "Edge + Cloud 하이브리드",
+    icon: "🏘️",
+    title: "동네 예능 콘텐츠",
     description:
-      "로컬 처리와 클라우드의 장점을 결합하여 빠르고 안정적인 서비스를 제공합니다.",
+      "일반인들의 경기도 프로 못지않은 예능 콘텐츠로 만들어 드립니다.",
     gradient: "from-indigo-500 to-blue-400",
   },
 ];
@@ -52,28 +54,30 @@ export default function Features() {
             <span className="gradient-text">핵심 기능</span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            BoomCast의 기술력으로 누구나 프로 캐스터 수준의 중계를 할 수 있습니다
+            동네 축구도 BoomCast와 함께하면 프로 예능 스포츠가 됩니다
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
-            <div
+            <Card
               key={index}
-              className="group glass rounded-xl p-6 hover:border-blue-500/30 transition-all duration-300"
+              className="group hover:border-blue-500/30 transition-all duration-300"
             >
-              <div
-                className={`w-12 h-12 rounded-lg bg-gradient-to-br ${feature.gradient} flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform`}
-              >
-                {feature.icon}
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-gray-400 text-sm leading-relaxed">
-                {feature.description}
-              </p>
-            </div>
+              <CardContent className="p-6">
+                <div
+                  className={`w-12 h-12 rounded-lg bg-gradient-to-br ${feature.gradient} flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform`}
+                >
+                  {feature.icon}
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  {feature.description}
+                </p>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>

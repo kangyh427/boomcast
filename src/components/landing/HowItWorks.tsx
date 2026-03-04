@@ -1,31 +1,33 @@
+import { Card, CardContent } from "@/components/ui/card";
+
 const steps = [
   {
     step: "01",
-    title: "촬영",
-    description: "스마트폰으로 경기를 촬영하세요. 앱이 자동으로 최적화된 화면을 캡처합니다.",
+    title: "세팅",
+    description: "경기장 중앙에 스마트폰을 세워두세요. 삼각대 하나면 충분합니다.",
     icon: "📱",
-    detail: "YOLOv8 기반 실시간 객체 감지",
+    detail: "스마트폰 거치 + 녹화 시작",
   },
   {
     step: "02",
-    title: "분석",
-    description: "AI가 경기 이벤트를 실시간으로 감지하고 분류합니다.",
+    title: "촬영",
+    description: "경기를 촬영하면 AI가 자동으로 이벤트를 감지합니다.",
     icon: "🧠",
-    detail: "Edge AI로 즉각 이벤트 트리거링",
+    detail: "AI 기반 실시간 이벤트 감지",
   },
   {
     step: "03",
     title: "캐스팅",
-    description: "멀티 페르소나 AI가 개성 있는 해설 대본을 동시에 생성합니다.",
+    description: "3명의 AI 캐스터가 각자의 개성으로 동네 축구를 중계합니다.",
     icon: "🎙️",
-    detail: "LLM 기반 실시간 대본 생성",
+    detail: "멀티 AI 캐스터 실시간 해설",
   },
   {
     step: "04",
-    title: "방송",
-    description: "자연스러운 TTS 음성과 영상이 합쳐져 완성된 중계가 됩니다.",
+    title: "공유",
+    description: "경기 영상과 AI 해설이 합쳐져 SNS에 바로 공유할 수 있습니다.",
     icon: "📡",
-    detail: "TTS + 오디오 덕킹 + 라이브 믹싱",
+    detail: "하이라이트 자동 생성 + 공유",
   },
 ];
 
@@ -35,10 +37,10 @@ export default function HowItWorks() {
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            <span className="gradient-text">어떻게 작동하나요?</span>
+            <span className="gradient-text">이용 방법</span>
           </h2>
           <p className="text-gray-400 text-lg">
-            4단계로 완성되는 AI 중계 파이프라인
+            4단계로 완성되는 동네 예능 스포츠 중계
           </p>
         </div>
 
@@ -49,21 +51,23 @@ export default function HowItWorks() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, index) => (
               <div key={index} className="relative text-center group">
-                <div className="glass rounded-xl p-6 hover:border-blue-500/30 transition-all duration-300">
-                  <div className="text-4xl mb-4">{step.icon}</div>
-                  <div className="text-xs font-mono text-blue-400 mb-2">
-                    STEP {step.step}
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    {step.title}
-                  </h3>
-                  <p className="text-gray-400 text-sm mb-3">
-                    {step.description}
-                  </p>
-                  <div className="text-xs text-blue-400/60 font-mono">
-                    {step.detail}
-                  </div>
-                </div>
+                <Card className="hover:border-blue-500/30 transition-all duration-300">
+                  <CardContent className="p-6">
+                    <div className="text-4xl mb-4">{step.icon}</div>
+                    <div className="text-xs font-mono text-blue-400 mb-2">
+                      STEP {step.step}
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-2">
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-400 text-sm mb-3">
+                      {step.description}
+                    </p>
+                    <div className="text-xs text-blue-400/60 font-mono">
+                      {step.detail}
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             ))}
           </div>

@@ -2,6 +2,7 @@
 
 import { MatchEvent } from "@/lib/types";
 import { getEventIcon, getImportanceColor } from "@/lib/demo-data";
+import { Card } from "@/components/ui/card";
 
 interface EventTimelineProps {
   events: MatchEvent[];
@@ -15,7 +16,7 @@ export default function EventTimeline({
   onEventClick,
 }: EventTimelineProps) {
   return (
-    <div className="glass rounded-xl p-4">
+    <Card className="p-4">
       <h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
         <span>📋</span> 경기 타임라인
       </h3>
@@ -23,19 +24,18 @@ export default function EventTimeline({
         {events.map((event, index) => {
           const isActive = index === currentEventIndex;
           const isPast = index < currentEventIndex;
-          const isFuture = index > currentEventIndex;
 
           return (
             <button
               key={event.id}
               onClick={() => onEventClick(index)}
-              className={`w-full text-left p-2.5 rounded-lg transition-all duration-200 flex items-center gap-3 ${
+              className={`w-full text-left p-2.5 rounded-lg transition-all duration-200 flex items-center gap-3 cursor-pointer ${
                 isActive
                   ? "bg-blue-500/20 border border-blue-500/30"
                   : isPast
                   ? "bg-white/5 hover:bg-white/10"
                   : "opacity-50 hover:opacity-75"
-              } ${isFuture ? "cursor-pointer" : "cursor-pointer"}`}
+              }`}
             >
               <span className="text-lg flex-shrink-0">
                 {getEventIcon(event.type)}
@@ -73,6 +73,6 @@ export default function EventTimeline({
           );
         })}
       </div>
-    </div>
+    </Card>
   );
 }

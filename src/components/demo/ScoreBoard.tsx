@@ -1,5 +1,8 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+
 interface ScoreBoardProps {
   homeTeam: string;
   awayTeam: string;
@@ -18,7 +21,7 @@ export default function ScoreBoard({
   isLive,
 }: ScoreBoardProps) {
   return (
-    <div className="glass rounded-xl p-4 sm:p-6">
+    <Card className="p-4 sm:p-6">
       <div className="flex items-center justify-between">
         {/* Home team */}
         <div className="flex-1 text-center">
@@ -35,10 +38,10 @@ export default function ScoreBoard({
           </span>
           <div className="flex flex-col items-center">
             {isLive && (
-              <div className="flex items-center gap-1 mb-1">
-                <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                <span className="text-xs text-red-400 font-medium">LIVE</span>
-              </div>
+              <Badge variant="destructive" className="mb-1 text-[10px] gap-1 px-1.5">
+                <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse" />
+                LIVE
+              </Badge>
             )}
             <span className="text-lg text-gray-400">:</span>
             <span className="text-sm text-gray-400 font-mono mt-1">
@@ -58,6 +61,6 @@ export default function ScoreBoard({
           <div className="text-xs text-gray-400 mt-1">AWAY</div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

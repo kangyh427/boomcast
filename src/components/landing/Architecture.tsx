@@ -1,71 +1,74 @@
+import { Card, CardContent } from "@/components/ui/card";
+
 export default function Architecture() {
   return (
     <section className="py-24 px-4">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            <span className="gradient-text">시스템 아키텍처</span>
+            <span className="gradient-text">기술 구조</span>
           </h2>
           <p className="text-gray-400 text-lg">
-            Edge + Cloud 하이브리드 파이프라인
+            스마트폰 + AI 클라우드 하이브리드
           </p>
         </div>
 
-        <div className="glass rounded-2xl p-8 overflow-x-auto">
+        <Card className="p-6 sm:p-8 overflow-x-auto">
           <pre className="text-xs sm:text-sm font-mono text-gray-300 leading-relaxed whitespace-pre">
 {`
   ┌─────────────────────────────────────────────────────────┐
-  │                    📱 EDGE (스마트폰)                     │
+  │              📱 경기장 중앙 스마트폰                       │
   │                                                         │
   │  ┌──────────┐    ┌──────────────┐    ┌───────────────┐  │
-  │  │ 카메라    │───▶│ YOLOv8-nano  │───▶│ 이벤트 트리거 │  │
-  │  │ 캡처     │    │ 객체 감지     │    │ (골/파울/...)  │  │
+  │  │ 카메라    │───▶│ AI 이벤트    │───▶│ 이벤트 전송   │  │
+  │  │ 녹화     │    │ 자동 감지     │    │ (골/파울/...)  │  │
   │  └──────────┘    └──────────────┘    └───────┬───────┘  │
-  │                                              │          │
   └──────────────────────────────────────────────┼──────────┘
                                                  │
-                        ▼ Event JSON (< 1KB)     │
+                      ▼ Event JSON (< 1KB)       │
                                                  │
   ┌──────────────────────────────────────────────┼──────────┐
-  │                    ☁️  CLOUD (서버리스)        │          │
+  │              ☁️  AI 클라우드                   │          │
   │                                              │          │
   │  ┌──────────────┐    ┌──────────────┐    ┌───▼───────┐  │
-  │  │ TTS 합성     │◀───│ 멀티 페르소나 │◀───│  이벤트   │  │
-  │  │ (ElevenLabs) │    │ LLM 대본생성  │    │  수신기   │  │
+  │  │ AI 음성 합성  │◀───│ 멀티 캐스터   │◀───│  이벤트   │  │
+  │  │ (TTS)        │    │ AI 대본 생성  │    │  수신기   │  │
   │  └──────┬───────┘    └──────────────┘    └───────────┘  │
-  │         │                                               │
   └─────────┼───────────────────────────────────────────────┘
             │
-            ▼ Audio Stream
+            ▼ 완성된 중계 콘텐츠
 
   ┌─────────────────────────────────────────────────────────┐
-  │                    📱 LOCAL MUXING                       │
+  │              📺 시청 & 공유                               │
   │                                                         │
   │  ┌──────────┐    ┌──────────────┐    ┌───────────────┐  │
-  │  │ 오디오    │───▶│ 영상 + 음성   │───▶│ 다이렉트      │  │
-  │  │ 덕킹     │    │ 믹싱         │    │ 업로드        │  │
+  │  │ 영상+음성 │───▶│ 하이라이트    │───▶│ SNS 공유      │  │
+  │  │ 합성     │    │ 자동 편집     │    │ YouTube/Insta │  │
   │  └──────────┘    └──────────────┘    └───────────────┘  │
-  │                                              │          │
-  └──────────────────────────────────────────────┼──────────┘
-                                                 │
-                                    ▼ YouTube / Instagram / TikTok
+  └─────────────────────────────────────────────────────────┘
 `}
           </pre>
-        </div>
+        </Card>
 
         <div className="grid sm:grid-cols-3 gap-4 mt-8">
-          <div className="glass rounded-xl p-4 text-center">
-            <div className="text-2xl mb-2">{"< 100ms"}</div>
-            <div className="text-sm text-gray-400">Edge 이벤트 감지 지연</div>
-          </div>
-          <div className="glass rounded-xl p-4 text-center">
-            <div className="text-2xl mb-2">{"< 2s"}</div>
-            <div className="text-sm text-gray-400">대본 생성 + TTS 합성</div>
-          </div>
-          <div className="glass rounded-xl p-4 text-center">
-            <div className="text-2xl mb-2">Zero Storage</div>
-            <div className="text-sm text-gray-400">서버 저장 없이 직접 업로드</div>
-          </div>
+          <Card className="text-center">
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold mb-2">{"< 100ms"}</div>
+              <div className="text-sm text-gray-400">이벤트 감지 속도</div>
+            </CardContent>
+          </Card>
+          <Card className="text-center">
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold mb-2">{"< 2s"}</div>
+              <div className="text-sm text-gray-400">AI 해설 생성 속도</div>
+            </CardContent>
+          </Card>
+          <Card className="text-center">
+            <CardContent className="p-4">
+              <div className="text-2xl font-bold mb-2">3명</div>
+              <div className="text-sm text-gray-400">동시 AI 캐스터</div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </section>

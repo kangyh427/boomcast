@@ -3,6 +3,8 @@
 import { casters } from "@/lib/casters";
 import { demoScenario } from "@/lib/demo-data";
 import { useCommentaryPlayer } from "@/hooks/useCommentaryPlayer";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import ScoreBoard from "@/components/demo/ScoreBoard";
 import MatchVisualizer from "@/components/demo/MatchVisualizer";
 import PlayerControls from "@/components/demo/PlayerControls";
@@ -19,12 +21,8 @@ export default function DemoPage() {
         {/* Page header */}
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2 py-0.5 text-xs font-medium bg-blue-500/20 text-blue-400 rounded">
-              DEMO
-            </span>
-            <span className="px-2 py-0.5 text-xs font-medium bg-amber-500/20 text-amber-400 rounded">
-              축구
-            </span>
+            <Badge>DEMO</Badge>
+            <Badge variant="warning">동네 축구</Badge>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-white">
             {demoScenario.title}
@@ -84,14 +82,14 @@ export default function DemoPage() {
             />
 
             {/* Tech info box */}
-            <div className="glass rounded-xl p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
                 <span>🔧</span> 기술 스택
               </h3>
               <div className="space-y-2 text-xs text-gray-400">
                 <div className="flex justify-between">
                   <span>이벤트 감지</span>
-                  <span className="text-blue-400">YOLOv8-nano / TFLite</span>
+                  <span className="text-blue-400">AI 자동 인식</span>
                 </div>
                 <div className="flex justify-between">
                   <span>대본 생성</span>
@@ -102,11 +100,11 @@ export default function DemoPage() {
                   <span className="text-blue-400">Web Speech API</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>처리 방식</span>
-                  <span className="text-blue-400">Edge + Cloud</span>
+                  <span>촬영 장비</span>
+                  <span className="text-blue-400">스마트폰 1대</span>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
         </div>
       </div>

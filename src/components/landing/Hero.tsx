@@ -2,11 +2,14 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 
 const castingLines = [
-  { caster: "🎙️ 김현우", text: "골~~~~~~!!!! 손흥민!!!!", color: "#3B82F6" },
-  { caster: "📊 박지성", text: "교과서적인 컷인 슈팅입니다.", color: "#10B981" },
-  { caster: "🎭 이영표", text: "이 맛에 축구 보는 겁니다!", color: "#F59E0B" },
+  { caster: "🎙️ 김현우", text: "골~~~~~~!!!! 이정민!!!!", color: "#3B82F6" },
+  { caster: "📊 박지훈", text: "동네 축구에서 이런 골이 나올 줄이야!", color: "#10B981" },
+  { caster: "🎭 이수빈", text: "이게 동네 축구 맞습니까?! ㅋㅋ", color: "#F59E0B" },
 ];
 
 export default function Hero() {
@@ -44,27 +47,27 @@ export default function Hero() {
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 text-center">
         <div className="animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm mb-8">
-            <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-            AI 멀티 페르소나 스포츠 캐스팅
-          </div>
+          <Badge className="mb-8 py-1.5 px-4 text-sm">
+            <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse mr-2" />
+            동네 예능 스포츠 AI 캐스팅
+          </Badge>
         </div>
 
         <h1
-          className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in-up"
+          className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 animate-fade-in-up"
           style={{ animationDelay: "0.1s" }}
         >
-          스마트폰이{" "}
-          <span className="gradient-text">중계 스튜디오</span>가 되다
+          동네 축구가{" "}
+          <span className="gradient-text">예능 콘텐츠</span>가 되다
         </h1>
 
         <p
           className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 animate-fade-in-up"
           style={{ animationDelay: "0.2s" }}
         >
-          2~3명의 AI 캐스터가 실시간으로 엔터테인먼트 중계를 제공합니다.
+          경기장에 스마트폰만 세워두세요.
           <br />
-          촬영만 하면, 나머지는 BoomCast가 알아서.
+          AI 캐스터 3명이 동네 축구를 프로 예능처럼 중계합니다.
         </p>
 
         {/* Live casting preview */}
@@ -72,11 +75,11 @@ export default function Hero() {
           className="max-w-2xl mx-auto mb-10 animate-fade-in-up"
           style={{ animationDelay: "0.3s" }}
         >
-          <div className="glass rounded-xl p-4">
+          <Card className="p-4">
             <div className="flex items-center gap-2 mb-3">
               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
               <span className="text-xs text-red-400 font-medium">LIVE</span>
-              <span className="text-xs text-gray-500">AI 캐스팅 미리보기</span>
+              <span className="text-xs text-gray-500">고운동 vs 아름동</span>
             </div>
             <div className="min-h-[60px] flex items-center">
               <div className="flex items-start gap-3 w-full">
@@ -89,25 +92,23 @@ export default function Hero() {
                 </p>
               </div>
             </div>
-          </div>
+          </Card>
         </div>
 
         <div
           className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up"
           style={{ animationDelay: "0.4s" }}
         >
-          <Link
-            href="/demo"
-            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-xl hover:from-blue-500 hover:to-blue-400 transition-all shadow-lg shadow-blue-500/25 text-lg"
-          >
-            데모 체험하기
-          </Link>
-          <a
-            href="#features"
-            className="px-8 py-3 border border-gray-600 text-gray-300 font-medium rounded-xl hover:bg-white/5 transition-all text-lg"
-          >
-            자세히 보기
-          </a>
+          <Button size="lg" asChild>
+            <Link href="/demo">
+              데모 체험하기
+            </Link>
+          </Button>
+          <Button variant="outline" size="lg" asChild>
+            <a href="#features">
+              자세히 보기
+            </a>
+          </Button>
         </div>
       </div>
     </section>

@@ -3,6 +3,7 @@
 import { Commentary } from "@/lib/types";
 import { getCasterById } from "@/lib/casters";
 import { useEffect, useRef } from "react";
+import { Card } from "@/components/ui/card";
 
 interface CommentaryDisplayProps {
   commentaries: Commentary[];
@@ -40,7 +41,7 @@ export default function CommentaryDisplay({
   };
 
   return (
-    <div className="glass rounded-xl p-4 flex flex-col h-full">
+    <Card className="p-4 flex flex-col h-full">
       <h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
         <span>💬</span> AI 캐스팅 해설
       </h3>
@@ -50,7 +51,7 @@ export default function CommentaryDisplay({
       >
         {commentaries.length === 0 && !typingCommentary && (
           <div className="flex items-center justify-center h-full text-gray-500 text-sm">
-            ▶ 재생 버튼을 눌러 AI 캐스팅을 시작하세요
+            재생 버튼을 눌러 AI 캐스팅을 시작하세요
           </div>
         )}
 
@@ -119,6 +120,6 @@ export default function CommentaryDisplay({
           </div>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

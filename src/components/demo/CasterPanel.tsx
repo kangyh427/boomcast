@@ -1,6 +1,7 @@
 "use client";
 
 import { Caster } from "@/lib/types";
+import { Card } from "@/components/ui/card";
 
 interface CasterPanelProps {
   casters: Caster[];
@@ -16,7 +17,7 @@ export default function CasterPanel({
   onToggleCaster,
 }: CasterPanelProps) {
   return (
-    <div className="glass rounded-xl p-4">
+    <Card className="p-4">
       <h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
         <span>🎙️</span> AI 캐스터
       </h3>
@@ -29,7 +30,7 @@ export default function CasterPanel({
             <button
               key={caster.id}
               onClick={() => onToggleCaster?.(caster.id)}
-              className={`w-full text-left p-3 rounded-lg transition-all duration-300 ${
+              className={`w-full text-left p-3 rounded-lg transition-all duration-300 cursor-pointer ${
                 isActive
                   ? "ring-2"
                   : isEnabled
@@ -87,6 +88,6 @@ export default function CasterPanel({
           );
         })}
       </div>
-    </div>
+    </Card>
   );
 }
