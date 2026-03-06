@@ -1,8 +1,20 @@
+/*
+ * ============================================================
+ * 파일: src/components/demo/MatchVisualizer.tsx
+ * 설명: 경기 비주얼라이저 - 경기장 시뮬레이션 뷰
+ * 경로: src/components/demo/MatchVisualizer.tsx
+ * 최근 작업: 세션 4 - 화이트 테마 적용
+ *           - 프로그레스 바: bg-gray-800 → bg-gray-200
+ *           - 외곽 카드: 화이트 border 적용
+ *           - 경기장 내부 시뮬레이션은 그대로 유지 (다크 배경이 적절)
+ * 작성일: 2025-03-06
+ * ============================================================
+ */
+
 "use client";
 
 import { MatchEvent } from "@/lib/types";
 import { getEventIcon } from "@/lib/demo-data";
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Smartphone } from "lucide-react";
 
@@ -18,15 +30,14 @@ export default function MatchVisualizer({
   progress,
 }: MatchVisualizerProps) {
   return (
-    <Card className="overflow-hidden border-0">
-      {/* Smartphone camera view - simulating phone placed at center of field */}
+    <div className="rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      {/* 경기장 시뮬레이션 (다크 배경 유지 - 경기장 분위기) */}
       <div className="relative aspect-video bg-gradient-to-b from-sky-300/20 via-green-700/40 to-green-900/50 overflow-hidden">
         {/* Sky gradient at top */}
         <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-sky-400/15 to-transparent" />
 
         {/* Field grass texture */}
         <div className="absolute inset-0">
-          {/* Grass lines effect */}
           <div className="absolute inset-0 opacity-10">
             {Array.from({ length: 12 }).map((_, i) => (
               <div
@@ -37,16 +48,12 @@ export default function MatchVisualizer({
             ))}
           </div>
 
-          {/* Perspective field lines - viewed from phone at ground level */}
+          {/* Perspective field lines */}
           <svg className="absolute inset-0 w-full h-full" viewBox="0 0 800 450" preserveAspectRatio="none">
-            {/* Field boundary lines converging to top center */}
             <line x1="0" y1="450" x2="300" y2="100" stroke="white" strokeWidth="1.5" opacity="0.15" />
             <line x1="800" y1="450" x2="500" y2="100" stroke="white" strokeWidth="1.5" opacity="0.15" />
-            {/* Goal line at distance */}
             <line x1="300" y1="100" x2="500" y2="100" stroke="white" strokeWidth="1" opacity="0.12" />
-            {/* Center circle at distance */}
             <ellipse cx="400" cy="220" rx="80" ry="25" fill="none" stroke="white" strokeWidth="1" opacity="0.1" />
-            {/* Center line */}
             <line x1="150" y1="280" x2="650" y2="280" stroke="white" strokeWidth="1" opacity="0.1" />
           </svg>
         </div>
@@ -97,13 +104,11 @@ export default function MatchVisualizer({
 
         {/* Phone camera frame overlay */}
         <div className="absolute inset-0 pointer-events-none">
-          {/* Camera UI corners */}
           <div className="absolute top-3 left-3 w-6 h-6 border-t-2 border-l-2 border-white/40 rounded-tl-sm" />
           <div className="absolute top-3 right-3 w-6 h-6 border-t-2 border-r-2 border-white/40 rounded-tr-sm" />
           <div className="absolute bottom-8 left-3 w-6 h-6 border-b-2 border-l-2 border-white/40 rounded-bl-sm" />
           <div className="absolute bottom-8 right-3 w-6 h-6 border-b-2 border-r-2 border-white/40 rounded-br-sm" />
 
-          {/* Recording indicator */}
           {isPlaying && (
             <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-black/40 px-2 py-1 rounded-full">
               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
@@ -111,7 +116,6 @@ export default function MatchVisualizer({
             </div>
           )}
 
-          {/* Crosshair - phone autofocus */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 opacity-20">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-3 bg-white" />
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-3 bg-white" />
@@ -185,13 +189,13 @@ export default function MatchVisualizer({
         )}
       </div>
 
-      {/* Progress bar */}
-      <div className="h-1 bg-gray-800">
+      {/* Progress bar - 화이트 테마 */}
+      <div className="h-1 bg-gray-200">
         <div
           className="h-full bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-300"
           style={{ width: `${progress}%` }}
         />
       </div>
-    </Card>
+    </div>
   );
 }
