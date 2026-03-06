@@ -6,14 +6,12 @@
  * 최근 작업: 세션 4 - Tailwind v4 + Turbopack 네이티브 호환
  *           postcss.config.mjs 삭제와 함께 적용
  *           Turbopack이 @import "tailwindcss"를 네이티브로 처리
- *           @theme inline으로 커스텀 색상/폰트 등록
  * 작성일: 2025-03-06
  * ============================================================
  */
 
 @import "tailwindcss";
 
-/* ── Tailwind 테마 인라인 연결 ── */
 @theme inline {
   --color-background: #FFFFFF;
   --color-foreground: #111827;
@@ -26,7 +24,6 @@
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
 }
 
-/* ── 화이트 테마 CSS 변수 ── */
 :root {
   --background: #FFFFFF;
   --foreground: #111827;
@@ -46,114 +43,51 @@
   --text-muted: #9CA3AF;
 }
 
-/* ── Body 기본 스타일 ── */
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans, Arial, Helvetica, sans-serif);
 }
 
-/* ── 스크롤바 (라이트 테마) ── */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--surface);
-}
-::-webkit-scrollbar-thumb {
-  background: #D1D5DB;
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #9CA3AF;
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
 
-/* ── 애니메이션 키프레임 ── */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-
 @keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
 }
-
 @keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
 }
-
 @keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 5px var(--primary-glow);
-  }
-  50% {
-    box-shadow: 0 0 20px var(--primary-glow), 0 0 40px var(--primary-glow);
-  }
+  0%, 100% { box-shadow: 0 0 5px var(--primary-glow); }
+  50% { box-shadow: 0 0 20px var(--primary-glow), 0 0 40px var(--primary-glow); }
 }
+@keyframes typing { from { width: 0; } to { width: 100%; } }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
-@keyframes typing {
-  from { width: 0; }
-  to { width: 100%; }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-/* ── 애니메이션 유틸리티 클래스 ── */
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out forwards;
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
-}
-
-.animate-slide-in-left {
-  animation: slideInLeft 0.5s ease-out forwards;
-}
-
-.animate-slide-in-right {
-  animation: slideInRight 0.5s ease-out forwards;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
+.animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+.animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+.animate-slide-in-left { animation: slideInLeft 0.5s ease-out forwards; }
+.animate-slide-in-right { animation: slideInRight 0.5s ease-out forwards; }
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 .animate-shimmer {
   background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.05), transparent);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
 
-/* ── 그라데이션 텍스트 ── */
 .gradient-text {
   background: linear-gradient(135deg, #2563EB, #7C3AED, #F59E0B);
   -webkit-background-clip: text;
@@ -161,51 +95,18 @@ body {
   background-clip: text;
 }
 
-/* ── 글래스 효과 (화이트 버전) ── */
 .glass {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(229, 231, 235, 0.8);
 }
 
-/* ── 이벤트 중요도 펄스 ── */
-.event-critical {
-  animation: pulse-glow 1.5s ease-in-out infinite;
-}
+.event-critical { animation: pulse-glow 1.5s ease-in-out infinite; }
 
-/* ── 레이아웃 유틸리티 ── */
-.section-padding {
-  padding-top: 5rem;
-  padding-bottom: 5rem;
-}
+.section-padding { padding-top: 5rem; padding-bottom: 5rem; }
+.container-max { max-width: 1280px; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
+@media (min-width: 640px) { .container-max { padding-left: 1.5rem; padding-right: 1.5rem; } }
+@media (min-width: 1024px) { .container-max { padding-left: 2rem; padding-right: 2rem; } }
 
-.container-max {
-  max-width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-@media (min-width: 640px) {
-  .container-max {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .container-max {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-}
-
-/* ── 카드 호버 효과 (화이트 테마) ── */
-.card-hover {
-  transition: all 0.3s ease;
-}
-.card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 4px 10px -6px rgba(0, 0, 0, 0.04);
-}
+.card-hover { transition: all 0.3s ease; }
+.card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 4px 10px -6px rgba(0, 0, 0, 0.04); }
