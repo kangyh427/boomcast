@@ -2,91 +2,20 @@
  * ============================================================
  * 파일: src/app/globals.css
  * 설명: BoomCast 글로벌 스타일 - 화이트 테마
- * 최근 작업: 세션 3 - 다크→화이트 테마 전면 전환
+ * 최근 작업: 세션 4 - Vercel 빌드 에러 수정 (@import → @import url)
+ *           Turbopack + PostCSS 호환 방식으로 변경
  * 작성일: 2025-03-06
  * ============================================================
  */
 
-@import "tailwindcss";
+/* Tailwind CSS v4 진입점 - PostCSS/Turbopack 호환 */
+@import url("tailwindcss");
 
 /* ── 화이트 테마 CSS 변수 ── */
 :root {
   --background: #FFFFFF;
   --foreground: #111827;
-  --primary: #2563EB;/*
- * ============================================================
- * 파일: src/components/ui/button.tsx
- * 설명: BoomCast 버튼 컴포넌트 - 화이트 테마
- * 최근 작업: 세션 3 - 다크→화이트 variant 색상 전체 교체
- * 작성일: 2025-03-06
- * ============================================================
- */
-
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
-
-const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
-  {
-    variants: {
-      variant: {
-        /* 기본: 블루 그라데이션 (화이트 배경에서 선명) */
-        default:
-          "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/20 hover:from-blue-500 hover:to-blue-400 hover:shadow-blue-500/30",
-        /* 파괴적 액션: 레드 */
-        destructive:
-          "bg-red-600 text-white hover:bg-red-500 shadow-sm",
-        /* 아웃라인: 밝은 보더 + 다크 텍스트 */
-        outline:
-          "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900 shadow-sm",
-        /* 보조: 밝은 그레이 배경 */
-        secondary:
-          "bg-gray-100 text-gray-900 hover:bg-gray-200 shadow-sm",
-        /* 고스트: 투명 배경 */
-        ghost:
-          "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
-        /* 링크: 밑줄 텍스트 */
-        link:
-          "text-blue-600 underline-offset-4 hover:underline hover:text-blue-700",
-      },
-      size: {
-        default: "h-10 px-5 py-2",
-        sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-12 rounded-xl px-8 text-lg",
-        icon: "h-10 w-10",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  }
-);
-
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-}
-
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
-);
-Button.displayName = "Button";
-
-export { Button, buttonVariants };
-
+  --primary: #2563EB;
   --primary-hover: #1D4ED8;
   --primary-light: #DBEAFE;
   --primary-glow: rgba(37, 99, 235, 0.15);
