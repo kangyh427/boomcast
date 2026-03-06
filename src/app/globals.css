@@ -3,9 +3,10 @@
  * 파일: src/app/globals.css
  * 설명: BoomCast 글로벌 스타일 - 화이트 테마
  * 경로: src/app/globals.css
- * 최근 작업: 세션 4 - Tailwind v4 정상 빌드 수정
- *           @import "tailwindcss" 유지 (v4 공식 방식)
- *           빌드 에러는 next.config.ts에서 Turbopack 비활성화로 해결
+ * 최근 작업: 세션 4 - Tailwind v4 + Turbopack 네이티브 호환
+ *           postcss.config.mjs 삭제와 함께 적용
+ *           Turbopack이 @import "tailwindcss"를 네이티브로 처리
+ *           @theme inline으로 커스텀 색상/폰트 등록
  * 작성일: 2025-03-06
  * ============================================================
  */
