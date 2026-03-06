@@ -1,6 +1,17 @@
+/*
+ * ============================================================
+ * 파일: src/components/demo/PlayerControls.tsx
+ * 설명: 재생 컨트롤 컴포넌트 - 화이트 테마
+ * 경로: src/components/demo/PlayerControls.tsx
+ * 최근 작업: 세션 4 - 화이트 리디자인
+ *           - text-gray-400 → text-gray-500 (상태 텍스트)
+ *           - 카드: 화이트 border 적용
+ * 작성일: 2025-03-06
+ * ============================================================
+ */
+
 "use client";
 
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw, Volume2, VolumeX } from "lucide-react";
 
@@ -22,7 +33,7 @@ export default function PlayerControls({
   onToggleTTS,
 }: PlayerControlsProps) {
   return (
-    <Card className="p-4 flex items-center justify-between">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 flex items-center justify-between">
       <div className="flex items-center gap-3">
         {/* Play/Pause button */}
         <Button
@@ -49,7 +60,7 @@ export default function PlayerControls({
           <RotateCcw className="w-4 h-4" />
         </Button>
 
-        <div className="text-sm text-gray-400">
+        <div className="text-sm text-gray-500">
           {isPlaying ? (
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
@@ -73,6 +84,6 @@ export default function PlayerControls({
           <span className="text-xs">TTS {ttsEnabled ? "ON" : "OFF"}</span>
         </Button>
       </div>
-    </Card>
+    </div>
   );
 }
