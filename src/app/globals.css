@@ -2,14 +2,28 @@
  * ============================================================
  * 파일: src/app/globals.css
  * 설명: BoomCast 글로벌 스타일 - 화이트 테마
- * 최근 작업: 세션 4 - Vercel 빌드 에러 수정 (@import → @import url)
- *           Turbopack + PostCSS 호환 방식으로 변경
+ * 경로: src/app/globals.css
+ * 최근 작업: 세션 4 - Tailwind v4 정상 빌드 수정
+ *           @import "tailwindcss" 유지 (v4 공식 방식)
+ *           빌드 에러는 next.config.ts에서 Turbopack 비활성화로 해결
  * 작성일: 2025-03-06
  * ============================================================
  */
 
-/* Tailwind CSS v4 진입점 - PostCSS/Turbopack 호환 */
-@import url("tailwindcss");
+@import "tailwindcss";
+
+/* ── Tailwind 테마 인라인 연결 ── */
+@theme inline {
+  --color-background: #FFFFFF;
+  --color-foreground: #111827;
+  --color-primary: #2563EB;
+  --color-accent: #F59E0B;
+  --color-surface: #F9FAFB;
+  --color-surface-light: #F3F4F6;
+  --color-border: #E5E7EB;
+  --font-sans: 'Pretendard', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+}
 
 /* ── 화이트 테마 CSS 변수 ── */
 :root {
@@ -29,19 +43,6 @@
   --text-primary: #111827;
   --text-secondary: #4B5563;
   --text-muted: #9CA3AF;
-}
-
-/* ── Tailwind 테마 인라인 연결 ── */
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-accent: var(--accent);
-  --color-surface: var(--surface);
-  --color-surface-light: var(--surface-light);
-  --color-border: var(--border);
-  --font-sans: 'Pretendard', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
 }
 
 /* ── Body 기본 스타일 ── */
