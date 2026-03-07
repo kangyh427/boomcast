@@ -2,9 +2,12 @@
  * ============================================================
  * 파일: src/components/common/MobileMenu.tsx
  * 설명: BoomCast 모바일 메뉴 드로어 (슬라이드 오버레이)
- * 최근 작업: 세션 3 - Header.tsx에서 모바일 메뉴 로직 분리
- *            한영 전환 버튼 포함 (세션 6에서 i18n 연결)
- * 작성일: 2025-03-06
+ * 경로: src/components/common/MobileMenu.tsx
+ * 최근 작업: 세션 7-B
+ *   - lang prop 제거 → useLang() 훅으로 직접 접근
+ *   - 언어 전환 버튼 UI 삭제 (한국 서비스 우선)
+ *   - "체험하기" CTA 유지
+ * 작성일: 2026-03-07
  * ============================================================
  */
 
@@ -14,6 +17,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useLang } from "@/providers/LanguageProvider";
 
 /* ── Props 타입 정의 ── */
 interface NavLink {
@@ -27,7 +31,6 @@ interface MobileMenuProps {
   onClose: () => void;
   navLinks: NavLink[];
   currentPath: string;
-  lang: string;
 }
 
 export default function MobileMenu({
@@ -35,8 +38,8 @@ export default function MobileMenu({
   onClose,
   navLinks,
   currentPath,
-  lang,
 }: MobileMenuProps) {
+  const { lang } = useLang();
 
   /* 메뉴 열릴 때 body 스크롤 방지 */
   useEffect(() => {
@@ -113,22 +116,11 @@ export default function MobileMenu({
           ))}
         </nav>
 
-        {/* 하단 영역: CTA + 언어 전환 */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 space-y-3">
-          {/* 언어 전환 (세션 6에서 기능 연결) */}
-          <div className="flex items-center justify-center gap-2">
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg">
-              🇰🇷 한국어
-            </button>
-            <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-              🇺🇸 English
-            </button>
-          </div>
-
-          {/* CTA 버튼 */}
+        {/* 하단 영역: CTA 버튼 */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
           <Button asChild className="w-full">
             <Link href="/demo" onClick={onClose}>
-              {lang === "ko" ? "체험하기" : "Try Demo"}
+              {lang === "ko" ? "무료 체험하기" : "Try Free"}
             </Link>
           </Button>
         </div>
