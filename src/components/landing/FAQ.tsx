@@ -1,20 +1,26 @@
 /*
  * ============================================================
  * 파일: src/components/landing/FAQ.tsx
- * 설명: BoomCast FAQ 아코디언 섹션
+ * 설명: BoomCast FAQ 아코디언 섹션 — 디자인 리뉴얼 v2
  * 경로: src/components/landing/FAQ.tsx
- * 최근 작업: 세션 7-B
- *   - "무료 체험은 어떻게 하나요?" 항목 삭제
- *   - → "결제는 어떻게 하나요?" 항목으로 교체
- *   - 무료 체험 관련 문구 전면 제거
+ * 최근 작업: 세션 11 - 디자인 리뉴얼 (마스터플랜 PART 8-7)
+ *   - 열림/닫힘: max-h 방식 → ref 기반 실제 높이 전환 (부드러움 개선)
+ *   - 활성 항목 좌측 블루 바 (3px) 표시
+ *   - 배경: gray-50/60 → white (Pricing이 slate이므로 대비)
+ *   - gradient-text 제거 (Hero에서만 사용 규칙)
+ *   - useInView 스크롤 등장 애니메이션
+ *   - "무료" 문구 없음 유지
+ *   - chevron 회전 애니메이션 유지
  * 작성일: 2026-03-07
  * ============================================================
  */
 
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { ChevronDown } from "lucide-react";
 import { useLang } from "@/providers/LanguageProvider";
+import { useInView, useInViewMultiple } from "@/hooks/useInView";
 
 /* ── 한/영 섹션 텍스트 ── */
 const text = {
@@ -84,80 +90,111 @@ const faqData = {
   ],
 };
 
+/* ── 개별 아코디언 아이템 컴포넌트 (ref 기반 높이 전환) ── */
+function AccordionItem({
+  question,
+  answer,
+  isOpen,
+  onToggle,
+}: {
+  question: string;
+  answer: string;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [height, setHeight] = useState(0);
+
+  /* 답변 열림/닫힘 시 실제 높이를 계산 */
+  useEffect(() => {
+    if (isOpen && contentRef.current) {
+      setHeight(contentRef.current.scrollHeight);
+    } else {
+      setHeight(0);
+    }
+  }, [isOpen]);
+
+  return (
+    <div
+      className={`bg-white rounded-2xl border transition-all duration-300 overflow-hidden ${
+        isOpen
+          ? "border-blue-200 shadow-md shadow-blue-50/60 border-l-[3px] border-l-blue-500"
+          : "border-gray-200 hover:border-gray-300"
+      }`}
+    >
+      {/* 질문 버튼 */}
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center justify-between px-6 py-5 text-left"
+      >
+        <span className="text-sm sm:text-base font-semibold text-gray-900 pr-4">
+          {question}
+        </span>
+        <ChevronDown
+          className={`w-5 h-5 text-gray-400 shrink-0 transition-transform duration-300 ${
+            isOpen ? "rotate-180 text-blue-500" : ""
+          }`}
+        />
+      </button>
+
+      {/* 답변 영역: ref 기반 실제 높이로 부드러운 전환 */}
+      <div
+        style={{ maxHeight: height }}
+        className="overflow-hidden transition-all duration-300 ease-in-out"
+      >
+        <div ref={contentRef} className="px-6 pb-5">
+          <p className="text-sm text-gray-500 leading-relaxed">
+            {answer}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function FAQ() {
   const { lang } = useLang();
   const t = text[lang];
   const items = faqData[lang];
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const toggle = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  const toggle = useCallback(
+    (index: number) => {
+      setOpenIndex(openIndex === index ? null : index);
+    },
+    [openIndex]
+  );
+
+  /* 스크롤 등장 애니메이션 */
+  const headerRef = useInView();
+  const listRef = useInViewMultiple();
 
   return (
-    <section className="py-20 sm:py-28 px-4 bg-gray-50/60">
+    <section className="py-20 sm:py-28 px-4 bg-white">
       <div className="max-w-3xl mx-auto">
         {/* ── 섹션 헤더 ── */}
-        <div className="text-center mb-14">
+        <div ref={headerRef} className="reveal text-center mb-14">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4">
-            <span className="gradient-text">{t.sectionTitle}</span>
+            {t.sectionTitle}
           </h2>
           <p className="text-gray-500 text-lg">{t.sectionSubtitle}</p>
         </div>
 
         {/* ── 아코디언 ── */}
-        <div className="space-y-3">
-          {items.map((item, index) => {
-            const isOpen = openIndex === index;
-            return (
-              <div
-                key={index}
-                className={`bg-white rounded-2xl border transition-all duration-300 ${
-                  isOpen
-                    ? "border-blue-200 shadow-md shadow-blue-50"
-                    : "border-gray-200 hover:border-gray-300"
-                }`}
-              >
-                {/* 질문 버튼 */}
-                <button
-                  onClick={() => toggle(index)}
-                  className="w-full flex items-center justify-between px-6 py-5 text-left"
-                >
-                  <span className="text-sm sm:text-base font-semibold text-gray-900 pr-4">
-                    {item.q}
-                  </span>
-                  <svg
-                    className={`w-5 h-5 text-gray-400 shrink-0 transition-transform duration-300 ${
-                      isOpen ? "rotate-180" : ""
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
-
-                {/* 답변 영역 */}
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    isOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div className="px-6 pb-5">
-                    <p className="text-sm text-gray-500 leading-relaxed">
-                      {item.a}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        <div ref={listRef} className="space-y-3">
+          {items.map((item, index) => (
+            <div
+              key={index}
+              className={`reveal stagger-${Math.min(index + 1, 5)}`}
+            >
+              <AccordionItem
+                question={item.q}
+                answer={item.a}
+                isOpen={openIndex === index}
+                onToggle={() => toggle(index)}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </section>
