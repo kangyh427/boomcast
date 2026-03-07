@@ -1,12 +1,12 @@
 /*
  * ============================================================
  * 파일: src/components/common/Header.tsx
- * 설명: BoomCast 헤더 - 화이트 테마 + 한/영 전환 기능
+ * 설명: BoomCast 헤더 - 화이트 테마
  * 경로: src/components/common/Header.tsx
- * 최근 작업: 세션 6 - useLang() 훅 적용
- *   - 하드코딩 lang → useLang() Context 전환
- *   - 언어 전환 버튼 기능 연결
- *   - "데모" → "체험" 변경 (인수인계서 [B] 반영)
+ * 최근 작업: 세션 7-B
+ *   - 언어 전환 버튼(🇰🇷/🇺🇸) UI 삭제 (한국 서비스 우선)
+ *   - useLang()은 내부 텍스트 전환용으로 유지 (향후 미국 확장 대비)
+ *   - MobileMenu에 toggleLang prop 제거
  * 작성일: 2026-03-07
  * ============================================================
  */
@@ -31,7 +31,7 @@ const navLinks = [
 export default function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { lang, toggleLang } = useLang();
+  const { lang } = useLang();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
@@ -64,19 +64,8 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* ── 우측 영역: 언어 전환 + CTA + 햄버거 ── */}
+          {/* ── 우측 영역: CTA + 햄버거 ── */}
           <div className="flex items-center gap-2">
-
-            {/* 언어 전환 버튼 */}
-            <button
-              onClick={toggleLang}
-              className="flex items-center gap-1 px-2 py-1.5 text-xs font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
-              aria-label={lang === "ko" ? "Switch to English" : "한국어로 전환"}
-            >
-              <span className={lang === "ko" ? "opacity-100" : "opacity-40"}>🇰🇷</span>
-              <span className="text-gray-300">/</span>
-              <span className={lang === "en" ? "opacity-100" : "opacity-40"}>🇺🇸</span>
-            </button>
 
             {/* CTA 버튼 (데스크탑) */}
             <Button size="sm" asChild className="hidden md:inline-flex">
@@ -105,7 +94,6 @@ export default function Header() {
         onClose={() => setIsMobileMenuOpen(false)}
         navLinks={navLinks}
         currentPath={pathname}
-        lang={lang}
       />
     </header>
   );
