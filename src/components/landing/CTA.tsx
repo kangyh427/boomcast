@@ -1,20 +1,22 @@
 /*
  * ============================================================
  * 파일: src/components/landing/CTA.tsx
- * 설명: BoomCast CTA(Call to Action) 섹션 - 화이트 테마
+ * 설명: BoomCast 최종 CTA 섹션 - 사이트 두 번째(마지막) CTA
  * 경로: src/components/landing/CTA.tsx
- * 최근 작업: 세션 4 - 화이트 리디자인 + 한/영 텍스트 하드코딩
- *           - 다크 테마 색상 완전 제거
- *           - 배경 글로우: blue-100 (화이트 대비 소프트)
- *           - 텍스트: text-gray-900, text-gray-500
- *           - 한/영 전환 대비 (lang 변수, 세션 6에서 i18n 훅 교체)
- * 작성일: 2025-03-06
+ * 최근 작업: 세션 6 - 문구 수정 + useLang 적용
+ *   - "데모 시작하기" → "무료 체험하기"
+ *   - "데모를 통해" → "체험을 통해"
+ *   - 사이트 전체 CTA 2곳 중 마지막 위치
+ * 작성일: 2026-03-07
  * ============================================================
  */
+
+"use client";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useLang } from "@/providers/LanguageProvider";
 
 /* ── 한/영 텍스트 ── */
 const text = {
@@ -22,45 +24,41 @@ const text = {
     titleBefore: "지금 바로 ",
     titleHighlight: "체험",
     titleAfter: "해보세요",
-    subtitle: "동네 축구가 어떻게 예능 콘텐츠로 변하는지, 데모를 통해 직접 경험해보세요.",
-    cta: "데모 시작하기",
+    subtitle: "첫 경기는 무료입니다. 동네 축구가 어떻게 예능 콘텐츠로 변하는지, 직접 경험해보세요.",
+    cta: "무료 체험하기",
   },
   en: {
     titleBefore: "Ready to ",
-    titleHighlight: "Experience",
+    titleHighlight: "Try",
     titleAfter: " It?",
-    subtitle: "See how your local soccer transforms into entertainment content through our live demo.",
-    cta: "Start Demo",
+    subtitle: "Your first game is free. See how your local soccer transforms into entertainment content.",
+    cta: "Try Free",
   },
 };
 
 export default function CTA() {
-  /* TODO: 세션 6에서 i18n 훅으로 교체 */
-  const lang: "ko" | "en" = "ko";
+  const { lang } = useLang();
   const t = text[lang];
 
   return (
-    <section className="py-20 sm:py-24 px-4 bg-gray-50/50">
+    <section className="py-20 sm:py-28 px-4 bg-gray-50/50">
       <div className="max-w-3xl mx-auto text-center">
-        <div className="relative bg-white rounded-2xl border border-gray-200 shadow-lg shadow-gray-200/50 p-10 sm:p-12 overflow-hidden">
-
-          {/* ── 배경 글로우 장식 ── */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-blue-100/40 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative bg-white rounded-3xl border border-gray-200 shadow-xl shadow-gray-200/40 p-10 sm:p-14 overflow-hidden">
+          {/* ── 배경 장식 ── */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-80 bg-blue-50/50 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-48 h-48 bg-amber-50/40 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10">
-            {/* 타이틀 */}
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900">
+            <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 text-gray-900">
               {t.titleBefore}
               <span className="gradient-text">{t.titleHighlight}</span>
               {t.titleAfter}
             </h2>
 
-            {/* 서브 텍스트 */}
-            <p className="text-gray-500 text-lg mb-8 max-w-lg mx-auto">
+            <p className="text-gray-500 text-lg mb-8 max-w-md mx-auto leading-relaxed">
               {t.subtitle}
             </p>
 
-            {/* CTA 버튼 */}
             <Button size="lg" asChild>
               <Link href="/demo" className="gap-2">
                 {t.cta}
