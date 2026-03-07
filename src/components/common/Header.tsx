@@ -70,7 +70,7 @@ export default function Header() {
             {/* CTA 버튼 (데스크탑) */}
             <Button size="sm" asChild className="hidden md:inline-flex">
               <Link href="/demo">
-                {lang === "ko" ? "무료 체험" : "Try Free"}
+                {lang === "ko" ? "체험하기" : "Try It"}
               </Link>
             </Button>
 
