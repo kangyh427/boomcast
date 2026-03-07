@@ -3,10 +3,10 @@
  * 파일: src/components/common/Footer.tsx
  * 설명: BoomCast 푸터 - 4컬럼 반응형
  * 경로: src/components/common/Footer.tsx
- * 최근 작업: 세션 6 - useLang 적용 + 문구 수정
- *   - "스포츠 중계" → "예능 영상"
- *   - "데모" → "체험"
- *   - 푸터 언어 전환 버튼도 useLang 연결
+ * 최근 작업: 세션 7-B
+ *   - 하단 언어 전환 버튼(🇰🇷/🇺🇸) UI 삭제 (한국 서비스 우선)
+ *   - useLang()은 텍스트 전환용으로 유지
+ *   - toggleLang import 제거
  * 작성일: 2026-03-07
  * ============================================================
  */
@@ -68,7 +68,7 @@ const socialLinks = [
 ];
 
 export default function Footer() {
-  const { lang, toggleLang } = useLang();
+  const { lang } = useLang();
 
   return (
     <footer className="bg-gray-50 border-t border-gray-200">
@@ -126,24 +126,12 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* ── 하단 바 ── */}
+      {/* ── 하단 바 (언어 전환 버튼 삭제됨) ── */}
       <div className="border-t border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-center">
           <p className="text-xs text-gray-400">
             © 2026 BoomCast. All rights reserved.
           </p>
-          <button
-            onClick={toggleLang}
-            className="flex items-center gap-2 text-xs text-gray-500 hover:text-gray-700 transition-colors"
-          >
-            <span className={lang === "ko" ? "font-semibold text-gray-700" : ""}>
-              🇰🇷 한국어
-            </span>
-            <span className="text-gray-300">|</span>
-            <span className={lang === "en" ? "font-semibold text-gray-700" : ""}>
-              🇺🇸 English
-            </span>
-          </button>
         </div>
       </div>
     </footer>
