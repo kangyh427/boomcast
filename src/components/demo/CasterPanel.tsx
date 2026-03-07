@@ -3,18 +3,17 @@
  * 파일: src/components/demo/CasterPanel.tsx
  * 설명: AI 캐스터 패널 컴포넌트 - 화이트 테마
  * 경로: src/components/demo/CasterPanel.tsx
- * 최근 작업: 세션 4 - 화이트 리디자인
- *           - text-gray-300 → text-gray-700 (제목)
- *           - bg-white/5 → bg-gray-50 (비활성 배경)
- *           - hover:bg-white/10 → hover:bg-gray-100
- *           - 카드: 화이트 border 적용
- * 작성일: 2025-03-06
+ * 최근 작업: 세션 7-B
+ *   - useLang() 적용: 제목 한영 전환
+ *   - "AI 캐스터" → 한영 전환
+ * 작성일: 2026-03-07
  * ============================================================
  */
 
 "use client";
 
 import { Caster } from "@/lib/types";
+import { useLang } from "@/providers/LanguageProvider";
 
 interface CasterPanelProps {
   casters: Caster[];
@@ -23,16 +22,25 @@ interface CasterPanelProps {
   enabledCasters: Set<string>;
 }
 
+/* ── 한/영 텍스트 ── */
+const text = {
+  ko: { title: "AI 캐스터" },
+  en: { title: "AI Casters" },
+};
+
 export default function CasterPanel({
   casters,
   activeCasterId,
   enabledCasters,
   onToggleCaster,
 }: CasterPanelProps) {
+  const { lang } = useLang();
+  const t = text[lang];
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
       <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-        <span>🎙️</span> AI 캐스터
+        <span>🎙️</span> {t.title}
       </h3>
       <div className="space-y-2">
         {casters.map((caster) => {
