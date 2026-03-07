@@ -3,21 +3,24 @@
  * 파일: src/components/landing/Pricing.tsx
  * 설명: BoomCast 요금 안내 섹션 - 화이트 테마
  * 경로: src/components/landing/Pricing.tsx
- * 최근 작업: 세션 4 - 화이트 리디자인 + 한/영 텍스트 하드코딩
- *           - 다크 테마 색상 완전 제거
- *           - BEST 플랜: 블루 보더 + 소프트 블루 섀도우
- *           - 체크 아이콘: text-blue-500
- *           - 가격 텍스트: text-gray-900 (기존 text-white)
- *           - 한/영 전환 대비 (lang 변수, 세션 6에서 i18n 훅 교체)
- * 작성일: 2025-03-06
+ * 최근 작업: 세션 6 - 전면 재작성
+ *   - 인수인계서 [F] 확정 요금 데이터 적용
+ *   - "실시간 이벤트 감지" 삭제
+ *   - "경기당 OO원" 비교가 삭제 (인수인계서 [M] ⚠️5)
+ *   - 영문 가격: $7.99 / $24.99 / $299.99
+ *   - useLang() 훅으로 i18n 전환 적용
+ * 작성일: 2026-03-07
  * ============================================================
  */
+
+"use client";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useLang } from "@/providers/LanguageProvider";
 
-/* ── 한/영 텍스트 ── */
+/* ── 한/영 섹션 텍스트 ── */
 const text = {
   ko: {
     sectionTitle: "요금 안내",
@@ -29,7 +32,7 @@ const text = {
   },
 };
 
-/* ── 요금 플랜 데이터 (한/영) ── */
+/* ── 요금 플랜 데이터 (인수인계서 [F] 확정) ── */
 const plans = {
   ko: [
     {
@@ -39,9 +42,9 @@ const plans = {
       unit: "원 / 경기",
       features: [
         "2시간 이내 경기 1회",
-        "AI 멀티 캐스터 3명",
-        "실시간 이벤트 감지",
-        "경기 하이라이트 영상",
+        "AI 예능 캐스터 3명 해설",
+        "예능 본편 영상 (20~30분)",
+        "하이라이트 숏폼 (1분 × 3~5개)",
       ],
       popular: false,
       cta: "단건 구매하기",
@@ -53,11 +56,11 @@ const plans = {
       unit: "원 / 월",
       features: [
         "월 4회 경기 이용",
-        "AI 멀티 캐스터 3명",
-        "실시간 이벤트 감지",
-        "경기 하이라이트 영상",
+        "AI 예능 캐스터 3명 해설",
+        "예능 본편 영상 (20~30분)",
+        "하이라이트 숏폼 (1분 × 3~5개)",
         "팀 전용 페이지 제공",
-        "경기당 8,750원",
+        "우선 처리",
       ],
       popular: true,
       cta: "월간 구독하기",
@@ -69,12 +72,13 @@ const plans = {
       unit: "원 / 년",
       features: [
         "연 50회 경기 이용",
-        "AI 멀티 캐스터 3명",
-        "실시간 이벤트 감지",
-        "경기 하이라이트 영상",
+        "AI 예능 캐스터 3명 해설",
+        "예능 본편 영상 (20~30분)",
+        "하이라이트 숏폼 (1분 × 3~5개)",
         "팀 전용 페이지 제공",
         "시즌 통계 리포트",
-        "경기당 8,000원",
+        "다음 시즌 할인 쿠폰",
+        "최우선 처리",
       ],
       popular: false,
       cta: "연간 구독하기",
@@ -88,9 +92,9 @@ const plans = {
       unit: "/ game",
       features: [
         "1 game up to 2 hours",
-        "3 AI Multi-Casters",
-        "Real-time event detection",
-        "Game highlight video",
+        "3 AI entertainment casters",
+        "Full show video (20-30 min)",
+        "Highlight shorts (1 min × 3-5)",
       ],
       popular: false,
       cta: "Buy Now",
@@ -99,31 +103,32 @@ const plans = {
       name: "Monthly",
       description: "For teams that play every week!",
       price: "$24.99",
-      unit: "/ month",
+      unit: "/ mo",
       features: [
-        "4 games per month",
-        "3 AI Multi-Casters",
-        "Real-time event detection",
-        "Game highlight videos",
-        "Team dedicated page",
-        "$6.25 per game",
+        "Up to 4 games per month",
+        "3 AI entertainment casters",
+        "Full show video (20-30 min)",
+        "Highlight shorts (1 min × 3-5)",
+        "Team page included",
+        "Priority processing",
       ],
       popular: true,
       cta: "Subscribe Monthly",
     },
     {
       name: "Annual",
-      description: "Best for league-running teams",
-      price: "$249.99",
-      unit: "/ year",
+      description: "For teams running a league",
+      price: "$299.99",
+      unit: "/ yr",
       features: [
-        "50 games per year",
-        "3 AI Multi-Casters",
-        "Real-time event detection",
-        "Game highlight videos",
-        "Team dedicated page",
+        "Up to 50 games per year",
+        "3 AI entertainment casters",
+        "Full show video (20-30 min)",
+        "Highlight shorts (1 min × 3-5)",
+        "Team page included",
         "Season statistics report",
-        "$5.00 per game",
+        "Next season discount coupon",
+        "Top priority processing",
       ],
       popular: false,
       cta: "Subscribe Annually",
@@ -132,15 +137,13 @@ const plans = {
 };
 
 export default function Pricing() {
-  /* TODO: 세션 6에서 i18n 훅으로 교체 */
-  const lang: "ko" | "en" = "ko";
+  const { lang } = useLang();
   const t = text[lang];
   const planList = plans[lang];
 
   return (
     <section id="pricing" className="py-20 sm:py-24 px-4 bg-white">
       <div className="max-w-6xl mx-auto">
-
         {/* ── 섹션 헤더 ── */}
         <div className="text-center mb-14">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900">
@@ -156,7 +159,7 @@ export default function Pricing() {
           {planList.map((plan, index) => (
             <div
               key={index}
-              className={`relative bg-white rounded-xl border p-6 transition-all duration-300 ${
+              className={`relative bg-white rounded-2xl border p-6 transition-all duration-300 ${
                 plan.popular
                   ? "border-blue-400 shadow-lg shadow-blue-100/50 scale-[1.02]"
                   : "border-gray-200 hover:border-gray-300 hover:shadow-md"
