@@ -1,16 +1,22 @@
 /*
  * ============================================================
  * 파일: src/components/common/Footer.tsx
- * 설명: BoomCast 푸터 - 4컬럼 반응형 (데/태/모: 4/2/1)
- * 최근 작업: 세션 3 - 신규 생성
- *            한/영 텍스트 하드코딩 (세션 6에서 i18n 교체)
- * 작성일: 2025-03-06
+ * 설명: BoomCast 푸터 - 4컬럼 반응형
+ * 경로: src/components/common/Footer.tsx
+ * 최근 작업: 세션 6 - useLang 적용 + 문구 수정
+ *   - "스포츠 중계" → "예능 영상"
+ *   - "데모" → "체험"
+ *   - 푸터 언어 전환 버튼도 useLang 연결
+ * 작성일: 2026-03-07
  * ============================================================
  */
 
-import Link from "next/link";
+"use client";
 
-/* ── 푸터 링크 데이터 (한/영 병기) ── */
+import Link from "next/link";
+import { useLang } from "@/providers/LanguageProvider";
+
+/* ── 푸터 링크 데이터 ── */
 const footerSections = [
   {
     titleKo: "서비스",
@@ -18,7 +24,7 @@ const footerSections = [
     links: [
       { href: "/#features", labelKo: "기능", labelEn: "Features" },
       { href: "/#pricing", labelKo: "요금", labelEn: "Pricing" },
-      { href: "/demo", labelKo: "데모", labelEn: "Demo" },
+      { href: "/demo", labelKo: "체험", labelEn: "Experience" },
     ],
   },
   {
@@ -36,7 +42,6 @@ const footerSections = [
     links: [
       { href: "/faq", labelKo: "FAQ", labelEn: "FAQ" },
       { href: "/contact", labelKo: "문의하기", labelEn: "Contact" },
-      { href: "/notice", labelKo: "공지사항", labelEn: "Notice" },
     ],
   },
 ];
@@ -63,15 +68,12 @@ const socialLinks = [
 ];
 
 export default function Footer() {
-  /* TODO: 세션 6에서 i18n 훅으로 교체 */
-  const lang = "ko";
+  const { lang, toggleLang } = useLang();
 
   return (
     <footer className="bg-gray-50 border-t border-gray-200">
-      {/* ── 메인 콘텐츠 ── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-
           {/* 브랜드 영역 */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-2 mb-4">
@@ -82,10 +84,9 @@ export default function Footer() {
             </Link>
             <p className="text-sm text-gray-500 leading-relaxed mb-4">
               {lang === "ko"
-                ? "스마트폰 하나로 동네 축구를 프로 예능처럼. AI가 만드는 새로운 스포츠 중계 경험."
-                : "Turn neighborhood games into pro entertainment with just a smartphone. A new sports casting experience powered by AI."}
+                ? "스마트폰 하나로 동네 축구를 예능 영상으로. AI가 만드는 새로운 스포츠 콘텐츠."
+                : "Turn neighborhood games into entertainment videos with just a smartphone. AI-powered sports content."}
             </p>
-            {/* 소셜 링크 */}
             <div className="flex items-center gap-3">
               {socialLinks.map((social) => (
                 <a
@@ -102,7 +103,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* 링크 섹션들 (3컬럼) */}
+          {/* 링크 섹션 */}
           {footerSections.map((section) => (
             <div key={section.titleKo}>
               <h3 className="text-sm font-semibold text-gray-900 mb-3">
@@ -127,17 +128,22 @@ export default function Footer() {
 
       {/* ── 하단 바 ── */}
       <div className="border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-gray-400">
             © 2026 BoomCast. All rights reserved.
           </p>
-
-          {/* 언어 전환 (세션 6에서 기능 연결) */}
-          <div className="flex items-center gap-2 text-xs">
-            <button className="text-gray-600 font-medium">🇰🇷 한국어</button>
+          <button
+            onClick={toggleLang}
+            className="flex items-center gap-2 text-xs text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            <span className={lang === "ko" ? "font-semibold text-gray-700" : ""}>
+              🇰🇷 한국어
+            </span>
             <span className="text-gray-300">|</span>
-            <button className="text-gray-400 hover:text-gray-600 transition-colors">🇺🇸 English</button>
-          </div>
+            <span className={lang === "en" ? "font-semibold text-gray-700" : ""}>
+              🇺🇸 English
+            </span>
+          </button>
         </div>
       </div>
     </footer>
