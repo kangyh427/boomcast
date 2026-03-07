@@ -3,12 +3,10 @@
  * 파일: src/components/demo/CommentaryDisplay.tsx
  * 설명: AI 캐스팅 해설 표시 컴포넌트 - 화이트 테마
  * 경로: src/components/demo/CommentaryDisplay.tsx
- * 최근 작업: 세션 4 - 화이트 리디자인
- *           - text-gray-300 → text-gray-700 (제목)
- *           - text-gray-200 → text-gray-700 (본문)
- *           - bg-white/60 → bg-blue-500/50 (커서)
- *           - 카드: 화이트 border 적용
- * 작성일: 2025-03-06
+ * 최근 작업: 세션 7-B
+ *   - useLang() 적용: 제목/안내 텍스트 한영 전환
+ *   - "AI 캐스팅 해설" 한영 전환
+ * 작성일: 2026-03-07
  * ============================================================
  */
 
@@ -17,6 +15,7 @@
 import { Commentary } from "@/lib/types";
 import { getCasterById } from "@/lib/casters";
 import { useEffect, useRef } from "react";
+import { useLang } from "@/providers/LanguageProvider";
 
 interface CommentaryDisplayProps {
   commentaries: Commentary[];
@@ -25,6 +24,18 @@ interface CommentaryDisplayProps {
     displayedText: string;
   } | null;
 }
+
+/* ── 한/영 텍스트 ── */
+const text = {
+  ko: {
+    title: "AI 캐스팅 해설",
+    emptyGuide: "재생 버튼을 눌러 AI 캐스팅을 시작하세요",
+  },
+  en: {
+    title: "AI Casting Commentary",
+    emptyGuide: "Press play to start AI casting",
+  },
+};
 
 /* ── 감정별 좌측 보더 색상 ── */
 const getEmotionStyle = (emotion: Commentary["emotion"]) => {
@@ -47,6 +58,8 @@ export default function CommentaryDisplay({
   typingCommentary,
 }: CommentaryDisplayProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { lang } = useLang();
+  const t = text[lang];
 
   /* 자동 스크롤 */
   useEffect(() => {
@@ -58,7 +71,7 @@ export default function CommentaryDisplay({
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 flex flex-col h-full">
       <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-        <span>💬</span> AI 캐스팅 해설
+        <span>💬</span> {t.title}
       </h3>
 
       <div
@@ -68,7 +81,7 @@ export default function CommentaryDisplay({
         {/* 비어있을 때 안내 */}
         {commentaries.length === 0 && !typingCommentary && (
           <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-            재생 버튼을 눌러 AI 캐스팅을 시작하세요
+            {t.emptyGuide}
           </div>
         )}
 
