@@ -3,10 +3,11 @@
  * 파일: src/components/demo/PlayerControls.tsx
  * 설명: 재생 컨트롤 컴포넌트 - 화이트 테마
  * 경로: src/components/demo/PlayerControls.tsx
- * 최근 작업: 세션 4 - 화이트 리디자인
- *           - text-gray-400 → text-gray-500 (상태 텍스트)
- *           - 카드: 화이트 border 적용
- * 작성일: 2025-03-06
+ * 최근 작업: 세션 7-B
+ *   - useLang() 적용: 상태 텍스트 한영 전환
+ *   - "AI 캐스팅 진행 중" / "재생 버튼을 눌러 시작" 한영 전환
+ *   - 버튼 title 한영 전환
+ * 작성일: 2026-03-07
  * ============================================================
  */
 
@@ -14,6 +15,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw, Volume2, VolumeX } from "lucide-react";
+import { useLang } from "@/providers/LanguageProvider";
 
 interface PlayerControlsProps {
   isPlaying: boolean;
@@ -24,6 +26,20 @@ interface PlayerControlsProps {
   onToggleTTS: () => void;
 }
 
+/* ── 한/영 텍스트 ── */
+const text = {
+  ko: {
+    playing: "AI 캐스팅 진행 중...",
+    stopped: "재생 버튼을 눌러 시작",
+    resetTitle: "처음부터",
+  },
+  en: {
+    playing: "AI casting in progress...",
+    stopped: "Press play to start",
+    resetTitle: "Restart",
+  },
+};
+
 export default function PlayerControls({
   isPlaying,
   ttsEnabled,
@@ -32,6 +48,9 @@ export default function PlayerControls({
   onReset,
   onToggleTTS,
 }: PlayerControlsProps) {
+  const { lang } = useLang();
+  const t = text[lang];
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 flex items-center justify-between">
       <div className="flex items-center gap-3">
@@ -55,7 +74,7 @@ export default function PlayerControls({
           variant="ghost"
           size="icon"
           className="w-10 h-10 rounded-full"
-          title="처음부터"
+          title={t.resetTitle}
         >
           <RotateCcw className="w-4 h-4" />
         </Button>
@@ -63,11 +82,11 @@ export default function PlayerControls({
         <div className="text-sm text-gray-500">
           {isPlaying ? (
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-              AI 캐스팅 진행 중...
+              <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+              {t.playing}
             </span>
           ) : (
-            "재생 버튼을 눌러 시작"
+            t.stopped
           )}
         </div>
       </div>
