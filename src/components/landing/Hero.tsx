@@ -3,12 +3,13 @@
  * 파일: src/components/landing/Hero.tsx
  * 설명: BoomCast 랜딩 히어로 섹션 - 화이트 테마
  * 경로: src/components/landing/Hero.tsx
- * 최근 작업: 세션 4 - 화이트 리디자인 + 한/영 텍스트 하드코딩
- *           - 다크 테마 색상 완전 제거
- *           - 타이핑 효과 유지 (캐스터별 컬러)
- *           - 라이브 프리뷰 카드 화이트 스타일
- *           - 한/영 전환 대비 (lang 변수, 세션 6에서 i18n 훅 교체)
- * 작성일: 2025-03-06
+ * 최근 작업: 세션 6 - 전면 재작성
+ *   - "LIVE", "실시간", "중계" 표현 완전 삭제
+ *   - subtitle: "예능 영상으로 만들어줍니다"로 변경
+ *   - ctaPrimary: "무료 체험하기"로 변경
+ *   - 캐스터 프리뷰에서 "라이브" 단어 제거
+ *   - useLang() 훅으로 i18n 전환 적용
+ * 작성일: 2026-03-07
  * ============================================================
  */
 
@@ -18,6 +19,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useLang } from "@/providers/LanguageProvider";
 
 /* ── 한/영 텍스트 ── */
 const text = {
@@ -27,10 +29,10 @@ const text = {
     titleHighlight: "예능 콘텐츠",
     titleAfter: "가 되다",
     subtitle1: "경기장에 스마트폰만 세워두세요.",
-    subtitle2: "AI 캐스터 3명이 동네 축구를 프로 예능처럼 중계합니다.",
-    liveLabel: "LIVE",
-    matchInfo: "고운동 vs 아름동",
-    ctaPrimary: "데모 체험하기",
+    subtitle2: "AI 캐스터 3명이 동네 축구를 예능 영상으로 만들어줍니다.",
+    previewLabel: "AI 캐스팅 미리보기",
+    matchInfo: "고운동 FC vs 아름동 FC",
+    ctaPrimary: "무료 체험하기",
     ctaSecondary: "자세히 보기",
   },
   en: {
@@ -39,20 +41,20 @@ const text = {
     titleHighlight: "Pro Entertainment",
     titleAfter: " Level",
     subtitle1: "Just set up your smartphone at the field.",
-    subtitle2: "3 AI casters turn your local soccer into pro-level entertainment.",
-    liveLabel: "LIVE",
-    matchInfo: "Team A vs Team B",
-    ctaPrimary: "Try Demo",
+    subtitle2: "3 AI casters turn your local soccer into entertainment videos.",
+    previewLabel: "AI Casting Preview",
+    matchInfo: "Team Alpha vs Team Beta",
+    ctaPrimary: "Try Free",
     ctaSecondary: "Learn More",
   },
 };
 
-/* ── 캐스터 라이브 프리뷰 데이터 ── */
+/* ── 캐스터 프리뷰 데이터 (LIVE 제거, 사후 편집 뉘앙스) ── */
 const castingLines = {
   ko: [
-    { caster: "🎙️ 김현우", text: "골~~~~~~!!!! 이정민!!!!", color: "#2563EB" },
+    { caster: "🎙️ 김현우", text: "골~~~~~~!!!! 이정민 선수!!!!", color: "#2563EB" },
     { caster: "📊 박지훈", text: "동네 축구에서 이런 골이 나올 줄이야!", color: "#059669" },
-    { caster: "🎭 이수빈", text: "이게 동네 축구 맞습니까?! ㅋㅋ", color: "#D97706" },
+    { caster: "🎭 이수빈", text: "이게 동네 축구 맞습니까?! ㅋㅋㅋ", color: "#D97706" },
   ],
   en: [
     { caster: "🎙️ Alex", text: "GOOOAL!!!!! What a strike!!", color: "#2563EB" },
@@ -65,9 +67,8 @@ export default function Hero() {
   const [currentLine, setCurrentLine] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
+  const { lang } = useLang();
 
-  /* TODO: 세션 6에서 i18n 훅으로 교체 */
-  const lang: "ko" | "en" = "ko";
   const t = text[lang];
   const lines = castingLines[lang];
 
@@ -96,12 +97,9 @@ export default function Hero() {
 
       {/* ── 배경 장식 (화이트 테마) ── */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* 상단 그라데이션 */}
         <div className="absolute inset-0 bg-gradient-to-b from-blue-50/60 via-transparent to-transparent" />
-        {/* 블러 원형 장식 */}
         <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-blue-100/40 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-amber-100/30 rounded-full blur-3xl" />
-        {/* 그리드 패턴 */}
         <div
           className="absolute inset-0 opacity-[0.03]"
           style={{
@@ -141,17 +139,17 @@ export default function Hero() {
           {t.subtitle2}
         </p>
 
-        {/* ── 라이브 캐스팅 프리뷰 카드 ── */}
+        {/* ── AI 캐스팅 프리뷰 카드 (LIVE 삭제) ── */}
         <div
           className="max-w-2xl mx-auto mb-10 animate-fade-in-up"
           style={{ animationDelay: "0.3s" }}
         >
           <div className="bg-white rounded-xl border border-gray-200 shadow-lg shadow-gray-200/50 p-5">
-            {/* 카드 헤더: LIVE 표시 + 매치 정보 */}
+            {/* 카드 헤더: 프리뷰 라벨 + 매치 정보 */}
             <div className="flex items-center gap-2 mb-4">
-              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-              <span className="text-xs text-red-500 font-semibold tracking-wide">
-                {t.liveLabel}
+              <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+              <span className="text-xs text-blue-600 font-semibold tracking-wide">
+                {t.previewLabel}
               </span>
               <span className="text-xs text-gray-400 ml-1">{t.matchInfo}</span>
             </div>
@@ -182,7 +180,7 @@ export default function Hero() {
             <Link href="/demo">{t.ctaPrimary}</Link>
           </Button>
           <Button variant="outline" size="lg" asChild>
-            <a href="#features">{t.ctaSecondary}</a>
+            <a href="#how-it-works">{t.ctaSecondary}</a>
           </Button>
         </div>
       </div>
