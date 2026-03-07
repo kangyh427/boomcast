@@ -1,143 +1,128 @@
 /*
  * ============================================================
  * 파일: src/components/landing/Features.tsx
- * 설명: BoomCast 핵심 기능 섹션 - 화이트 테마
+ * 설명: BoomCast 핵심 기능 섹션 - 4개 카드 (확정)
  * 경로: src/components/landing/Features.tsx
- * 최근 작업: 세션 4 - 화이트 리디자인 + 한/영 텍스트 하드코딩
- *           - 다크 테마 색상 완전 제거 (text-white → text-gray-900 등)
- *           - 카드: 화이트 배경 + 그라데이션 아이콘 배경
- *           - 컬러풀 아이콘 배경 유지 (시각적 포인트)
- *           - 한/영 전환 대비 (lang 변수, 세션 6에서 i18n 훅 교체)
- * 작성일: 2025-03-06
+ * 최근 작업: 세션 6 - 전면 재작성
+ *   - 6개 → 4개로 압축 (인수인계서 [D] 확정)
+ *   - "실시간 이벤트 감지" 삭제
+ *   - "자연스러운 AI 음성" 삭제
+ *   - 각 카드 클릭 시 /features/... 상세 페이지 이동
+ *   - "중계" 표현 → "예능 영상" / "콘텐츠"로 교체
+ *   - useLang() 훅으로 i18n 전환 적용
+ * 작성일: 2026-03-07
  * ============================================================
  */
 
-/* ── 한/영 텍스트 ── */
+"use client";
+
+import Link from "next/link";
+import { useLang } from "@/providers/LanguageProvider";
+
+/* ── 한/영 섹션 텍스트 ── */
 const text = {
   ko: {
     sectionTitle: "핵심 기능",
-    sectionSubtitle: "동네 축구도 BoomCast와 함께하면 프로 예능 스포츠가 됩니다",
+    sectionSubtitle:
+      "촬영만 하면, AI가 알아서 예능 영상을 만들어줍니다",
+    learnMore: "자세히 보기 →",
   },
   en: {
     sectionTitle: "Key Features",
-    sectionSubtitle: "Turn your local soccer into pro entertainment with BoomCast",
+    sectionSubtitle:
+      "Just record, and AI creates entertainment videos for you",
+    learnMore: "Learn more →",
   },
 };
 
-/* ── 기능 카드 데이터 (한/영) ── */
+/* ── 기능 카드 데이터 (인수인계서 [D] 확정 4개) ── */
 const features = {
   ko: [
     {
       icon: "🎙️",
-      title: "AI 멀티 캐스터",
+      title: "AI 예능 캐스터 3인",
       description:
-        "실황 캐스터, 해설위원, 엔터테이너까지. 3명의 AI가 동네 축구를 프로 예능처럼 중계합니다.",
+        "실황+해설+예능, 진짜 방송 같은 AI 해설. 3명의 AI 캐스터가 동네 축구를 프로 예능 영상으로 만들어줍니다.",
       gradient: "from-blue-500 to-cyan-400",
       bgLight: "bg-blue-50",
-    },
-    {
-      icon: "📱",
-      title: "스마트폰 하나로",
-      description:
-        "경기장 중앙에 스마트폰만 세워두세요. 별도 장비 없이 프로급 중계가 시작됩니다.",
-      gradient: "from-purple-500 to-pink-400",
-      bgLight: "bg-purple-50",
-    },
-    {
-      icon: "⚡",
-      title: "실시간 이벤트 감지",
-      description:
-        "골, 파울, 코너킥 등 경기 이벤트를 자동으로 인식하여 즉각적인 해설을 생성합니다.",
-      gradient: "from-amber-500 to-orange-400",
-      bgLight: "bg-amber-50",
+      href: "/features/ai-casters",
     },
     {
       icon: "🎬",
-      title: "자동 하이라이트",
+      title: "자동 하이라이트 숏폼",
       description:
-        "주요 장면을 자동으로 편집하여 SNS에 바로 올릴 수 있는 숏폼 영상을 생성합니다.",
+        "골 장면이 1분 숏폼으로, 인스타에 바로 공유. AI가 자동으로 편집한 하이라이트 클립을 받아보세요.",
       gradient: "from-green-500 to-emerald-400",
       bgLight: "bg-green-50",
+      href: "/features/highlights",
     },
     {
-      icon: "🔊",
-      title: "자연스러운 AI 음성",
+      icon: "📱",
+      title: "스마트폰 하나로 촬영",
       description:
-        "감정이 살아있는 자연스러운 캐스팅 음성으로 경기 몰입감을 높입니다.",
-      gradient: "from-red-500 to-rose-400",
-      bgLight: "bg-red-50",
+        "별도 장비 0원, 삼각대에 폰만 세우세요. 앱 내 AI가 촬영 중 주요 장면을 자동으로 태깅합니다.",
+      gradient: "from-purple-500 to-pink-400",
+      bgLight: "bg-purple-50",
+      href: "/features/easy-setup",
     },
     {
-      icon: "🏘️",
-      title: "동네 예능 콘텐츠",
+      icon: "👥",
+      title: "팀 전용 페이지",
       description:
-        "일반인들의 경기도 프로 못지않은 예능 콘텐츠로 만들어 드립니다.",
-      gradient: "from-indigo-500 to-blue-400",
-      bgLight: "bg-indigo-50",
+        "우리 팀만의 공간, 시즌 기록, 경기 아카이브. 팀원들과 영상을 모아보고 함께 즐기세요.",
+      gradient: "from-amber-500 to-orange-400",
+      bgLight: "bg-amber-50",
+      href: "/features/team-page",
     },
   ],
   en: [
     {
       icon: "🎙️",
-      title: "AI Multi-Casters",
+      title: "3 AI Entertainment Casters",
       description:
-        "Play-by-play, color commentator, and entertainer. 3 AI personas cast your game like a pro show.",
+        "Play-by-play + Analyst + Entertainer, just like real TV. 3 AI casters turn your local game into pro entertainment videos.",
       gradient: "from-blue-500 to-cyan-400",
       bgLight: "bg-blue-50",
-    },
-    {
-      icon: "📱",
-      title: "Just Your Phone",
-      description:
-        "Set up a smartphone at the field. No extra equipment needed for pro-level coverage.",
-      gradient: "from-purple-500 to-pink-400",
-      bgLight: "bg-purple-50",
-    },
-    {
-      icon: "⚡",
-      title: "Real-Time Detection",
-      description:
-        "Automatically detects goals, fouls, corner kicks and generates instant commentary.",
-      gradient: "from-amber-500 to-orange-400",
-      bgLight: "bg-amber-50",
+      href: "/features/ai-casters",
     },
     {
       icon: "🎬",
-      title: "Auto Highlights",
+      title: "Auto Highlight Shorts",
       description:
-        "Key moments are auto-edited into short-form clips ready for social media sharing.",
+        "Goal clips auto-edited into 1-min shorts for Instagram. Get AI-edited highlight reels instantly.",
       gradient: "from-green-500 to-emerald-400",
       bgLight: "bg-green-50",
+      href: "/features/highlights",
     },
     {
-      icon: "🔊",
-      title: "Natural AI Voice",
+      icon: "📱",
+      title: "Just Your Smartphone",
       description:
-        "Emotionally rich, natural casting voices that heighten the excitement of every play.",
-      gradient: "from-red-500 to-rose-400",
-      bgLight: "bg-red-50",
+        "Zero equipment cost, just your phone on a tripod. The in-app AI auto-tags key moments during recording.",
+      gradient: "from-purple-500 to-pink-400",
+      bgLight: "bg-purple-50",
+      href: "/features/easy-setup",
     },
     {
-      icon: "🏘️",
-      title: "Local to Legendary",
+      icon: "👥",
+      title: "Team Page",
       description:
-        "Transform any amateur game into entertainment content that rivals professional broadcasts.",
-      gradient: "from-indigo-500 to-blue-400",
-      bgLight: "bg-indigo-50",
+        "Your team's space with season records and game archive. Collect and enjoy videos with your teammates.",
+      gradient: "from-amber-500 to-orange-400",
+      bgLight: "bg-amber-50",
+      href: "/features/team-page",
     },
   ],
 };
 
 export default function Features() {
-  /* TODO: 세션 6에서 i18n 훅으로 교체 */
-  const lang: "ko" | "en" = "ko";
+  const { lang } = useLang();
   const t = text[lang];
   const featureList = features[lang];
 
   return (
     <section id="features" className="py-20 sm:py-24 px-4 bg-gray-50/50">
       <div className="max-w-6xl mx-auto">
-
         {/* ── 섹션 헤더 ── */}
         <div className="text-center mb-14">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900">
@@ -148,19 +133,20 @@ export default function Features() {
           </p>
         </div>
 
-        {/* ── 기능 카드 그리드 ── */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* ── 기능 카드 그리드 (2×2) ── */}
+        <div className="grid md:grid-cols-2 gap-6">
           {featureList.map((feature, index) => (
-            <div
+            <Link
               key={index}
-              className="group bg-white rounded-xl border border-gray-200 p-6 
-                         hover:border-blue-200 hover:shadow-lg hover:shadow-blue-50 
-                         transition-all duration-300 card-hover"
+              href={feature.href}
+              className="group bg-white rounded-2xl border border-gray-200 p-6
+                         hover:border-blue-200 hover:shadow-lg hover:shadow-blue-50
+                         transition-all duration-300 card-hover block"
             >
               {/* 아이콘 */}
               <div
-                className={`w-12 h-12 rounded-lg bg-gradient-to-br ${feature.gradient} 
-                            flex items-center justify-center text-2xl mb-4 
+                className={`w-12 h-12 rounded-lg bg-gradient-to-br ${feature.gradient}
+                            flex items-center justify-center text-2xl mb-4
                             group-hover:scale-110 transition-transform duration-300`}
               >
                 {feature.icon}
@@ -172,10 +158,15 @@ export default function Features() {
               </h3>
 
               {/* 설명 */}
-              <p className="text-gray-500 text-sm leading-relaxed">
+              <p className="text-gray-500 text-sm leading-relaxed mb-3">
                 {feature.description}
               </p>
-            </div>
+
+              {/* 상세 보기 링크 */}
+              <span className="text-sm font-medium text-blue-600 group-hover:text-blue-700 transition-colors">
+                {t.learnMore}
+              </span>
+            </Link>
           ))}
         </div>
       </div>
