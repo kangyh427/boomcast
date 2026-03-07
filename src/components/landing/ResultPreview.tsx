@@ -1,12 +1,17 @@
 /*
  * ============================================================
  * 파일: src/components/landing/ResultPreview.tsx
- * 설명: AI 결과물 미리보기 섹션 - 사이트 첫 번째 CTA 위치
+ * 설명: AI 결과물 미리보기 섹션 — 사이트 첫 번째 CTA 위치
  * 경로: src/components/landing/ResultPreview.tsx
- * 최근 작업: 세션 7-B
- *   - "무료 체험하기" → "체험하기"
- *   - "Try Free" → "Try It"
- *   - 무료 관련 문구 전면 삭제
+ * 최근 작업: 세션 10 - 디자인 리뉴얼 (마스터플랜 PART 8-2)
+ *   - 배경: cream (#FFFBF5) → Hero 다크와 대비
+ *   - 이모지 → lucide-react 아이콘 + 컬러 배경으로 교체
+ *   - 폰 프레임 반사광(glare) 효과 추가
+ *   - useInView 스크롤 등장 애니메이션 적용
+ *   - 캐스터 이름에서 이모지 제거 → lucide 아이콘
+ *   - hover 효과 강화 (translateY -4px + shadow-xl)
+ *   - "실시간" 금지, "무료" 금지 준수
+ * 이전: 세션 7-B - 무료 문구 삭제
  * 작성일: 2026-03-07
  * ============================================================
  */
@@ -16,7 +21,25 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useInView } from "@/hooks/useInView";
 import { useLang } from "@/providers/LanguageProvider";
+import { Film, Smartphone, LinkIcon, Mic, BookOpen, Laugh } from "lucide-react";
+
+/* ── 결과물 아이콘 맵 ── */
+const resultIconMap: Record<string, { icon: React.ReactNode; bg: string }> = {
+  film: {
+    icon: <Film className="w-5 h-5 text-blue-600" />,
+    bg: "bg-blue-100",
+  },
+  smartphone: {
+    icon: <Smartphone className="w-5 h-5 text-purple-600" />,
+    bg: "bg-purple-100",
+  },
+  link: {
+    icon: <LinkIcon className="w-5 h-5 text-emerald-600" />,
+    bg: "bg-emerald-100",
+  },
+};
 
 /* ── 한/영 섹션 텍스트 ── */
 const text = {
@@ -28,9 +51,9 @@ const text = {
     tabAnalyst: "해설",
     tabEntertainment: "예능",
     resultItems: [
-      { icon: "🎬", title: "예능 본편 영상", desc: "20~30분, AI 캐스터 3명의 풀 해설" },
-      { icon: "📱", title: "하이라이트 숏폼", desc: "1분 × 3~5개, 인스타·틱톡용" },
-      { icon: "🔗", title: "원클릭 공유", desc: "팀 단톡방에 링크 하나로 공유" },
+      { iconKey: "film", title: "예능 본편 영상", desc: "20~30분, AI 캐스터 3명의 풀 해설" },
+      { iconKey: "smartphone", title: "하이라이트 숏폼", desc: "1분 × 3~5개, 인스타·틱톡용" },
+      { iconKey: "link", title: "원클릭 공유", desc: "팀 단톡방에 링크 하나로 공유" },
     ],
     priceNote: "이 모든 것이 경기당 9,900원",
   },
@@ -42,19 +65,28 @@ const text = {
     tabAnalyst: "Analyst",
     tabEntertainment: "Entertainment",
     resultItems: [
-      { icon: "🎬", title: "Full Show Video", desc: "20-30 min with 3 AI caster commentary" },
-      { icon: "📱", title: "Highlight Shorts", desc: "1 min × 3-5 clips for Instagram/TikTok" },
-      { icon: "🔗", title: "One-Click Share", desc: "Share via a single link to team chat" },
+      { iconKey: "film", title: "Full Show Video", desc: "20-30 min with 3 AI caster commentary" },
+      { iconKey: "smartphone", title: "Highlight Shorts", desc: "1 min × 3-5 clips for Instagram/TikTok" },
+      { iconKey: "link", title: "One-Click Share", desc: "Share via a single link to team chat" },
     ],
     priceNote: "All this for just $7.99 per game",
   },
 };
 
-/* ── 캐스터별 대사 ── */
-const casterPreview = {
+/* ── 캐스터별 대사 (lucide 아이콘 사용) ── */
+interface CasterData {
+  icon: React.ReactNode;
+  name: string;
+  color: string;
+  lines: string[];
+}
+
+const casterPreview: Record<string, Record<string, CasterData>> = {
   ko: {
     playByPlay: {
-      name: "🎙️ 김현우 (실황)",
+      icon: <Mic className="w-4 h-4 text-white" />,
+      name: "김현우 (실황)",
+      color: "#2563EB",
       lines: [
         "35분, 이정민이 공을 받습니다!",
         "왼발 슛—— 들어갑니다!!",
@@ -63,7 +95,9 @@ const casterPreview = {
       ],
     },
     analyst: {
-      name: "📊 박지훈 (해설)",
+      icon: <BookOpen className="w-4 h-4 text-white" />,
+      name: "박지훈 (해설)",
+      color: "#059669",
       lines: [
         "수비 라인 사이 공간을 정확히 찔렀습니다",
         "왼발 인사이드로 감아 차는 기술이 돋보이네요",
@@ -72,7 +106,9 @@ const casterPreview = {
       ],
     },
     entertainment: {
-      name: "🎭 이수빈 (예능)",
+      icon: <Laugh className="w-4 h-4 text-white" />,
+      name: "이수빈 (예능)",
+      color: "#D97706",
       lines: [
         "잠깐잠깐잠깐 뭐야 이거?!",
         "이게 동네 축구 맞습니까?! ㅋㅋㅋ",
@@ -83,7 +119,9 @@ const casterPreview = {
   },
   en: {
     playByPlay: {
-      name: "🎙️ Alex (Play-by-Play)",
+      icon: <Mic className="w-4 h-4 text-white" />,
+      name: "Alex (Play-by-Play)",
+      color: "#2563EB",
       lines: [
         "35th minute, Lee gets the ball!",
         "Left foot shot—— IT'S IN!!",
@@ -92,7 +130,9 @@ const casterPreview = {
       ],
     },
     analyst: {
-      name: "📊 James (Analyst)",
+      icon: <BookOpen className="w-4 h-4 text-white" />,
+      name: "James (Analyst)",
+      color: "#059669",
       lines: [
         "He found the gap between the defenders perfectly",
         "Brilliant technique with the inside of his left foot",
@@ -101,7 +141,9 @@ const casterPreview = {
       ],
     },
     entertainment: {
-      name: "🎭 Mia (Entertainment)",
+      icon: <Laugh className="w-4 h-4 text-white" />,
+      name: "Mia (Entertainment)",
+      color: "#D97706",
       lines: [
         "Wait wait wait, WHAT?!",
         "Is this really a local game?! LOL",
@@ -117,6 +159,8 @@ type TabKey = "playByPlay" | "analyst" | "entertainment";
 export default function ResultPreview() {
   const [activeTab, setActiveTab] = useState<TabKey>("entertainment");
   const { lang } = useLang();
+  const sectionRef = useInView();
+
   const t = text[lang];
   const preview = casterPreview[lang];
 
@@ -129,26 +173,41 @@ export default function ResultPreview() {
   const activeCaster = preview[activeTab];
 
   return (
-    <section id="result-preview" className="py-20 sm:py-28 px-4 bg-gradient-to-b from-gray-50 to-white">
-      <div className="max-w-6xl mx-auto">
+    <section
+      id="result-preview"
+      className="py-20 sm:py-28 px-4 bg-cream"
+    >
+      <div ref={sectionRef} className="max-w-6xl mx-auto">
         {/* ── 섹션 헤더 ── */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 whitespace-pre-line leading-tight">
-            <span className="gradient-text">{t.sectionTitle}</span>
+          <h2 className="reveal text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 whitespace-pre-line leading-tight">
+            {t.sectionTitle}
           </h2>
-          <p className="text-gray-500 text-lg mt-4">{t.sectionSubtitle}</p>
+          <p className="reveal stagger-1 text-gray-500 text-lg mt-4">
+            {t.sectionSubtitle}
+          </p>
         </div>
 
         {/* ── 2컬럼 (모바일: 세로 스택) ── */}
         <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-center">
           {/* ── 좌측: 폰 프레임 (3/5) ── */}
-          <div className="lg:col-span-3 flex justify-center">
+          <div className="reveal-left lg:col-span-3 flex justify-center">
             <div className="w-full max-w-[380px]">
+              {/* 폰 프레임 + 반사광 */}
               <div className="relative bg-gray-900 rounded-[2.5rem] p-3 shadow-2xl shadow-gray-900/20">
                 {/* 노치 */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-gray-900 rounded-b-2xl z-10" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-gray-900 rounded-b-2xl z-20" />
 
-                <div className="bg-white rounded-[2rem] overflow-hidden">
+                {/* 반사광 (glare) 효과 — PART 8-2 */}
+                <div
+                  className="absolute inset-0 rounded-[2.5rem] z-10 pointer-events-none"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.04) 100%)",
+                  }}
+                />
+
+                <div className="relative bg-white rounded-[2rem] overflow-hidden">
                   {/* 스코어보드 */}
                   <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 px-5 py-4 pt-10">
                     <div className="flex items-center justify-between text-white/80 text-xs mb-1">
@@ -182,7 +241,22 @@ export default function ResultPreview() {
 
                   {/* 대사 */}
                   <div className="p-5 min-h-[220px]">
-                    <p className="text-xs font-bold text-gray-900 mb-4">{activeCaster.name}</p>
+                    {/* 캐스터 이름 (lucide 아이콘 + 텍스트) */}
+                    <div className="flex items-center gap-2 mb-4">
+                      <div
+                        className="w-6 h-6 rounded-md flex items-center justify-center"
+                        style={{ backgroundColor: activeCaster.color }}
+                      >
+                        {activeCaster.icon}
+                      </div>
+                      <span
+                        className="text-xs font-bold"
+                        style={{ color: activeCaster.color }}
+                      >
+                        {activeCaster.name}
+                      </span>
+                    </div>
+
                     <div className="space-y-2.5">
                       {activeCaster.lines.map((line, i) => (
                         <div
@@ -208,23 +282,30 @@ export default function ResultPreview() {
           </div>
 
           {/* ── 우측: 결과물 구성 + CTA (2/5) ── */}
-          <div className="lg:col-span-2">
-            {/* 결과물 카드 */}
+          <div className="reveal-right lg:col-span-2">
+            {/* 결과물 카드 (lucide 아이콘 + 컬러 배경) */}
             <div className="space-y-4 mb-8">
-              {t.resultItems.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-start gap-4 bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition-shadow duration-300"
-                >
-                  <div className="w-11 h-11 rounded-xl bg-gray-50 flex items-center justify-center text-xl shrink-0">
-                    {item.icon}
+              {t.resultItems.map((item, i) => {
+                const iconData = resultIconMap[item.iconKey];
+                return (
+                  <div
+                    key={i}
+                    className="flex items-start gap-4 bg-white rounded-2xl border border-gray-100 p-5 shadow-sm card-hover transition-all duration-300"
+                  >
+                    <div
+                      className={`w-11 h-11 rounded-xl ${iconData.bg} flex items-center justify-center shrink-0`}
+                    >
+                      {iconData.icon}
+                    </div>
+                    <div>
+                      <p className="font-bold text-gray-900 text-sm">{item.title}</p>
+                      <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">
+                        {item.desc}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold text-gray-900 text-sm">{item.title}</p>
-                    <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* 가격 + CTA (사이트 전체 첫 번째 CTA) */}
