@@ -1,65 +1,58 @@
 /*
  * ============================================================
  * 파일: src/components/landing/Hero.tsx
- * 설명: BoomCast 랜딩 히어로 섹션 - 화이트 테마
+ * 설명: BoomCast 히어로 섹션 - Vrew 스타일 임팩트 히어로
  * 경로: src/components/landing/Hero.tsx
- * 최근 작업: 세션 6 - 전면 재작성
- *   - "LIVE", "실시간", "중계" 표현 완전 삭제
- *   - subtitle: "예능 영상으로 만들어줍니다"로 변경
- *   - ctaPrimary: "무료 체험하기"로 변경
- *   - 캐스터 프리뷰에서 "라이브" 단어 제거
- *   - useLang() 훅으로 i18n 전환 적용
+ * 최근 작업: 세션 6 - 전면 재디자인
+ *   - CTA 버튼 제거 (사이트 전체 CTA는 딱 2곳만)
+ *   - 스크롤 유도 화살표로 자연스러운 흐름 유도
+ *   - 타이핑 캐스터 프리뷰를 더 임팩트있게
+ *   - Vrew 스타일: 큰 타이틀 + 서브 카피 + 비주얼
  * 작성일: 2026-03-07
  * ============================================================
  */
 
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useLang } from "@/providers/LanguageProvider";
 
 /* ── 한/영 텍스트 ── */
 const text = {
   ko: {
-    badge: "동네 예능 스포츠 AI 캐스팅",
-    titleBefore: "동네 축구가 ",
+    badge: "AI 예능 스포츠 캐스팅",
+    titleLine1: "동네 축구가",
     titleHighlight: "예능 콘텐츠",
-    titleAfter: "가 되다",
-    subtitle1: "경기장에 스마트폰만 세워두세요.",
-    subtitle2: "AI 캐스터 3명이 동네 축구를 예능 영상으로 만들어줍니다.",
+    titleLine2: "가 되다",
+    subtitle: "경기장에 스마트폰만 세워두세요.\nAI 캐스터 3명이 동네 축구를 예능 영상으로 만들어줍니다.",
     previewLabel: "AI 캐스팅 미리보기",
     matchInfo: "고운동 FC vs 아름동 FC",
-    ctaPrimary: "무료 체험하기",
-    ctaSecondary: "자세히 보기",
+    scrollHint: "아래로 스크롤",
   },
   en: {
     badge: "AI Entertainment Sports Casting",
-    titleBefore: "Your Local Game, ",
+    titleLine1: "Your Local Game,",
     titleHighlight: "Pro Entertainment",
-    titleAfter: " Level",
-    subtitle1: "Just set up your smartphone at the field.",
-    subtitle2: "3 AI casters turn your local soccer into entertainment videos.",
+    titleLine2: "Level",
+    subtitle: "Just set up your smartphone at the field.\n3 AI casters turn your local soccer into entertainment videos.",
     previewLabel: "AI Casting Preview",
     matchInfo: "Team Alpha vs Team Beta",
-    ctaPrimary: "Try Free",
-    ctaSecondary: "Learn More",
+    scrollHint: "Scroll down",
   },
 };
 
-/* ── 캐스터 프리뷰 데이터 (LIVE 제거, 사후 편집 뉘앙스) ── */
+/* ── 캐스터 프리뷰 데이터 ── */
 const castingLines = {
   ko: [
-    { caster: "🎙️ 김현우", text: "골~~~~~~!!!! 이정민 선수!!!!", color: "#2563EB" },
-    { caster: "📊 박지훈", text: "동네 축구에서 이런 골이 나올 줄이야!", color: "#059669" },
-    { caster: "🎭 이수빈", text: "이게 동네 축구 맞습니까?! ㅋㅋㅋ", color: "#D97706" },
+    { caster: "🎙️ 김현우", role: "실황", text: "골~~~~~~!!!! 이정민 선수!!!!", color: "#2563EB" },
+    { caster: "📊 박지훈", role: "해설", text: "수비 라인 사이를 정확히 찔렀습니다!", color: "#059669" },
+    { caster: "🎭 이수빈", role: "예능", text: "이게 동네 축구 맞습니까?! ㅋㅋㅋ", color: "#D97706" },
   ],
   en: [
-    { caster: "🎙️ Alex", text: "GOOOAL!!!!! What a strike!!", color: "#2563EB" },
-    { caster: "📊 James", text: "Unbelievable goal for a local match!", color: "#059669" },
-    { caster: "🎭 Mia", text: "Is this really a local game?! LOL", color: "#D97706" },
+    { caster: "🎙️ Alex", role: "Play", text: "GOOOAL!!!!! What a strike!!", color: "#2563EB" },
+    { caster: "📊 James", role: "Analyst", text: "He found the gap between defenders!", color: "#059669" },
+    { caster: "🎭 Mia", role: "Fun", text: "Is this really a local game?! LOL", color: "#D97706" },
   ],
 };
 
@@ -79,10 +72,10 @@ export default function Hero() {
       if (displayText.length < line.text.length) {
         const timer = setTimeout(() => {
           setDisplayText(line.text.slice(0, displayText.length + 1));
-        }, 50);
+        }, 45);
         return () => clearTimeout(timer);
       } else {
-        const timer = setTimeout(() => setIsTyping(false), 2000);
+        const timer = setTimeout(() => setIsTyping(false), 2500);
         return () => clearTimeout(timer);
       }
     } else {
@@ -93,95 +86,111 @@ export default function Hero() {
   }, [displayText, isTyping, currentLine, lines]);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
-
-      {/* ── 배경 장식 (화이트 테마) ── */}
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-white">
+      {/* ── 배경 장식 ── */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-50/60 via-transparent to-transparent" />
-        <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-blue-100/40 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-amber-100/30 rounded-full blur-3xl" />
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: "radial-gradient(circle, #2563EB 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-        />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 via-transparent to-transparent" />
+        <div className="absolute top-20 left-[15%] w-72 h-72 bg-blue-100/30 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-[15%] w-64 h-64 bg-amber-100/25 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 text-center">
-
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
         {/* ── 뱃지 ── */}
-        <div className="animate-fade-in-up">
-          <Badge className="mb-8 py-1.5 px-4 text-sm bg-blue-50 text-blue-700 border-blue-200">
-            <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse mr-2 inline-block" />
+        <div className="animate-fade-in-up mb-8">
+          <Badge className="py-1.5 px-5 text-sm bg-blue-50 text-blue-700 border-blue-200 font-medium">
             {t.badge}
           </Badge>
         </div>
 
         {/* ── 메인 타이틀 ── */}
         <h1
-          className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 text-gray-900 animate-fade-in-up"
+          className="text-4xl sm:text-5xl lg:text-7xl font-extrabold mb-6 text-gray-900 tracking-tight leading-tight animate-fade-in-up"
           style={{ animationDelay: "0.1s" }}
         >
-          {t.titleBefore}
+          {t.titleLine1}
+          <br className="sm:hidden" />{" "}
           <span className="gradient-text">{t.titleHighlight}</span>
-          {t.titleAfter}
+          {t.titleLine2}
         </h1>
 
         {/* ── 서브 타이틀 ── */}
         <p
-          className="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto mb-10 animate-fade-in-up"
+          className="text-base sm:text-lg text-gray-500 max-w-xl mx-auto mb-12 whitespace-pre-line leading-relaxed animate-fade-in-up"
           style={{ animationDelay: "0.2s" }}
         >
-          {t.subtitle1}
-          <br />
-          {t.subtitle2}
+          {t.subtitle}
         </p>
 
-        {/* ── AI 캐스팅 프리뷰 카드 (LIVE 삭제) ── */}
+        {/* ── 캐스터 프리뷰 카드 ── */}
         <div
-          className="max-w-2xl mx-auto mb-10 animate-fade-in-up"
+          className="max-w-lg mx-auto animate-fade-in-up"
           style={{ animationDelay: "0.3s" }}
         >
-          <div className="bg-white rounded-xl border border-gray-200 shadow-lg shadow-gray-200/50 p-5">
-            {/* 카드 헤더: 프리뷰 라벨 + 매치 정보 */}
-            <div className="flex items-center gap-2 mb-4">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-xl shadow-gray-200/40 overflow-hidden">
+            {/* 카드 헤더 */}
+            <div className="px-5 py-3 bg-gray-50 border-b border-gray-100 flex items-center gap-2">
               <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-              <span className="text-xs text-blue-600 font-semibold tracking-wide">
-                {t.previewLabel}
-              </span>
-              <span className="text-xs text-gray-400 ml-1">{t.matchInfo}</span>
+              <span className="text-xs text-blue-600 font-semibold">{t.previewLabel}</span>
+              <span className="text-xs text-gray-400 ml-auto">{t.matchInfo}</span>
+            </div>
+            {/* 캐스터 인디케이터 */}
+            <div className="px-5 pt-4 pb-1 flex gap-3">
+              {lines.map((line, i) => (
+                <button
+                  key={i}
+                  className={`text-xs px-2.5 py-1 rounded-full transition-all duration-300 ${
+                    i === currentLine
+                      ? "font-semibold text-white"
+                      : "text-gray-400 bg-gray-50"
+                  }`}
+                  style={i === currentLine ? { backgroundColor: line.color } : {}}
+                  onClick={() => {
+                    setCurrentLine(i);
+                    setDisplayText("");
+                    setIsTyping(true);
+                  }}
+                >
+                  {line.role}
+                </button>
+              ))}
             </div>
             {/* 타이핑 영역 */}
-            <div className="min-h-[56px] flex items-center">
+            <div className="px-5 py-4 min-h-[64px] flex items-center">
               <div className="flex items-start gap-3 w-full">
                 <span
-                  className="text-sm font-semibold whitespace-nowrap"
+                  className="text-sm font-bold whitespace-nowrap"
                   style={{ color: lines[currentLine].color }}
                 >
                   {lines[currentLine].caster}
                 </span>
-                <p className="text-left text-gray-700 text-sm sm:text-base leading-relaxed">
+                <p className="text-left text-gray-800 text-sm sm:text-base leading-relaxed">
                   {displayText}
-                  <span className="inline-block w-0.5 h-4 bg-blue-500/50 animate-pulse ml-0.5 align-middle" />
+                  <span className="inline-block w-0.5 h-4 bg-blue-500/60 animate-pulse ml-0.5 align-middle" />
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ── CTA 버튼 ── */}
+        {/* ── 스크롤 유도 ── */}
         <div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up"
-          style={{ animationDelay: "0.4s" }}
+          className="mt-14 animate-fade-in"
+          style={{ animationDelay: "0.8s" }}
         >
-          <Button size="lg" asChild>
-            <Link href="/demo">{t.ctaPrimary}</Link>
-          </Button>
-          <Button variant="outline" size="lg" asChild>
-            <a href="#how-it-works">{t.ctaSecondary}</a>
-          </Button>
+          <a
+            href="#result-preview"
+            className="inline-flex flex-col items-center text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <span className="text-xs mb-2">{t.scrollHint}</span>
+            <svg
+              className="w-5 h-5 animate-bounce"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </a>
         </div>
       </div>
     </section>
