@@ -1,14 +1,12 @@
 /*
  * ============================================================
  * 파일: src/components/landing/ResultPreview.tsx
- * 설명: AI가 만든 예능 영상 미리보기 섹션
+ * 설명: AI 결과물 미리보기 섹션 - 사이트 첫 번째 CTA 위치
  * 경로: src/components/landing/ResultPreview.tsx
- * 최근 작업: 세션 6 - 신규 생성 (인수인계서 [J-1])
- *   - Hero 바로 아래 위치
- *   - 모바일 폰 프레임 안에 캐스터 탭 전환 (실황/해설/예능)
- *   - 9,900원 CTA + 무료 체험 버튼
- *   - 데스크탑: 2컬럼 (좌 폰 프레임 + 우 설명)
- *   - 모바일: 세로 스택
+ * 최근 작업: 세션 6 - 재디자인
+ *   - 사이트 전체에서 CTA는 여기 1개 + CTA섹션 1개 = 총 2개
+ *   - Vrew 스타일: 좌 폰 프레임 + 우 설명
+ *   - 캐스터 탭 전환 (실황/해설/예능)
  * 작성일: 2026-03-07
  * ============================================================
  */
@@ -23,42 +21,36 @@ import { useLang } from "@/providers/LanguageProvider";
 /* ── 한/영 섹션 텍스트 ── */
 const text = {
   ko: {
-    sectionTitle: "AI가 만든 예능 영상, 미리 보세요",
+    sectionTitle: "AI가 만든 예능 영상,\n미리 보세요",
     sectionSubtitle: "촬영만 하면, 이런 영상이 자동으로 완성됩니다",
-    priceNote: "경기당 9,900원에 이런 영상이 완성됩니다",
     ctaPrimary: "무료 체험하기",
-    ctaSecondary: "요금 보기",
     tabPlayByPlay: "실황",
     tabAnalyst: "해설",
     tabEntertainment: "예능",
-    resultTitle: "결과물 구성",
-    resultMain: "예능 본편 영상",
-    resultMainDesc: "20~30분, AI 캐스터 3명의 풀 해설",
-    resultShort: "하이라이트 숏폼",
-    resultShortDesc: "1분 × 3~5개, 인스타/틱톡용",
-    resultShare: "원클릭 공유",
-    resultShareDesc: "팀 단톡방에 링크 하나로 공유",
+    resultItems: [
+      { icon: "🎬", title: "예능 본편 영상", desc: "20~30분, AI 캐스터 3명의 풀 해설" },
+      { icon: "📱", title: "하이라이트 숏폼", desc: "1분 × 3~5개, 인스타·틱톡용" },
+      { icon: "🔗", title: "원클릭 공유", desc: "팀 단톡방에 링크 하나로 공유" },
+    ],
+    priceNote: "이 모든 것이 경기당 9,900원",
   },
   en: {
-    sectionTitle: "Preview AI-Created Entertainment",
-    sectionSubtitle: "Just record the game, and videos like these are created automatically",
-    priceNote: "All this for just $7.99 per game",
+    sectionTitle: "Preview AI-Created\nEntertainment",
+    sectionSubtitle: "Just record the game — videos like these are created automatically",
     ctaPrimary: "Try Free",
-    ctaSecondary: "See Pricing",
     tabPlayByPlay: "Play-by-Play",
     tabAnalyst: "Analyst",
     tabEntertainment: "Entertainment",
-    resultTitle: "What You Get",
-    resultMain: "Full Show Video",
-    resultMainDesc: "20-30 min with 3 AI caster commentary",
-    resultShort: "Highlight Shorts",
-    resultShortDesc: "1 min × 3-5 clips for Instagram/TikTok",
-    resultShare: "One-Click Share",
-    resultShareDesc: "Share with your team chat via a single link",
+    resultItems: [
+      { icon: "🎬", title: "Full Show Video", desc: "20-30 min with 3 AI caster commentary" },
+      { icon: "📱", title: "Highlight Shorts", desc: "1 min × 3-5 clips for Instagram/TikTok" },
+      { icon: "🔗", title: "One-Click Share", desc: "Share via a single link to team chat" },
+    ],
+    priceNote: "All this for just $7.99 per game",
   },
 };
 
-/* ── 캐스터별 대사 미리보기 (탭 전환용) ── */
+/* ── 캐스터별 대사 ── */
 const casterPreview = {
   ko: {
     playByPlay: {
@@ -123,7 +115,7 @@ const casterPreview = {
 type TabKey = "playByPlay" | "analyst" | "entertainment";
 
 export default function ResultPreview() {
-  const [activeTab, setActiveTab] = useState<TabKey>("playByPlay");
+  const [activeTab, setActiveTab] = useState<TabKey>("entertainment");
   const { lang } = useLang();
   const t = text[lang];
   const preview = casterPreview[lang];
@@ -137,43 +129,38 @@ export default function ResultPreview() {
   const activeCaster = preview[activeTab];
 
   return (
-    <section className="py-20 sm:py-24 px-4 bg-gray-50">
+    <section id="result-preview" className="py-20 sm:py-28 px-4 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-6xl mx-auto">
-
         {/* ── 섹션 헤더 ── */}
-        <div className="text-center mb-14">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 whitespace-pre-line leading-tight">
             <span className="gradient-text">{t.sectionTitle}</span>
           </h2>
-          <p className="text-gray-500 text-lg">{t.sectionSubtitle}</p>
+          <p className="text-gray-500 text-lg mt-4">{t.sectionSubtitle}</p>
         </div>
 
-        {/* ── 2컬럼 레이아웃 (모바일: 세로 스택) ── */}
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-
-          {/* ── 좌측: 폰 프레임 + 캐스터 탭 ── */}
-          <div className="flex justify-center">
-            <div className="w-full max-w-[320px]">
-              {/* 폰 프레임 */}
-              <div className="relative bg-gray-900 rounded-[2.5rem] p-3 shadow-2xl">
+        {/* ── 2컬럼 (모바일: 세로 스택) ── */}
+        <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-center">
+          {/* ── 좌측: 폰 프레임 (3/5) ── */}
+          <div className="lg:col-span-3 flex justify-center">
+            <div className="w-full max-w-[380px]">
+              <div className="relative bg-gray-900 rounded-[2.5rem] p-3 shadow-2xl shadow-gray-900/20">
                 {/* 노치 */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-gray-900 rounded-b-2xl z-10" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-gray-900 rounded-b-2xl z-10" />
 
-                {/* 스크린 영역 */}
                 <div className="bg-white rounded-[2rem] overflow-hidden">
-                  {/* 상단 바 */}
-                  <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-3 pt-8">
-                    <div className="flex items-center justify-between">
-                      <span className="text-white text-xs font-semibold">
-                        {lang === "ko" ? "고운동 FC vs 아름동 FC" : "Team Alpha vs Team Beta"}
-                      </span>
-                      <span className="text-blue-200 text-xs">35&apos;</span>
+                  {/* 스코어보드 */}
+                  <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 px-5 py-4 pt-10">
+                    <div className="flex items-center justify-between text-white/80 text-xs mb-1">
+                      <span>{lang === "ko" ? "고운동 FC" : "Team Alpha"}</span>
+                      <span>{lang === "ko" ? "아름동 FC" : "Team Beta"}</span>
                     </div>
-                    <div className="flex items-center justify-center gap-6 mt-2">
-                      <span className="text-white text-2xl font-bold">1</span>
-                      <span className="text-blue-200 text-sm">-</span>
-                      <span className="text-white text-2xl font-bold">0</span>
+                    <div className="flex items-center justify-center gap-8">
+                      <span className="text-white text-3xl font-black">1</span>
+                      <span className="text-blue-200 text-lg font-light">-</span>
+                      <span className="text-white text-3xl font-black">0</span>
                     </div>
+                    <p className="text-center text-blue-200 text-xs mt-1">35&apos;</p>
                   </div>
 
                   {/* 탭 전환 */}
@@ -182,9 +169,9 @@ export default function ResultPreview() {
                       <button
                         key={tab.key}
                         onClick={() => setActiveTab(tab.key)}
-                        className={`flex-1 py-2.5 text-xs font-medium transition-colors ${
+                        className={`flex-1 py-3 text-xs font-semibold transition-all duration-200 ${
                           activeTab === tab.key
-                            ? "text-blue-600 border-b-2 border-blue-600"
+                            ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50/50"
                             : "text-gray-400 hover:text-gray-600"
                         }`}
                       >
@@ -193,17 +180,15 @@ export default function ResultPreview() {
                     ))}
                   </div>
 
-                  {/* 대사 목록 */}
-                  <div className="p-4 min-h-[200px]">
-                    <p className="text-xs font-semibold text-gray-900 mb-3">
-                      {activeCaster.name}
-                    </p>
+                  {/* 대사 */}
+                  <div className="p-5 min-h-[220px]">
+                    <p className="text-xs font-bold text-gray-900 mb-4">{activeCaster.name}</p>
                     <div className="space-y-2.5">
                       {activeCaster.lines.map((line, i) => (
                         <div
-                          key={i}
-                          className="bg-gray-50 rounded-lg px-3 py-2 text-xs text-gray-700 leading-relaxed animate-fade-in"
-                          style={{ animationDelay: `${i * 0.1}s` }}
+                          key={`${activeTab}-${i}`}
+                          className="bg-gray-50 rounded-xl px-4 py-2.5 text-sm text-gray-700 leading-relaxed animate-fade-in-up"
+                          style={{ animationDelay: `${i * 0.08}s` }}
                         >
                           {line}
                         </div>
@@ -211,9 +196,9 @@ export default function ResultPreview() {
                     </div>
                   </div>
 
-                  {/* 하단 버튼 */}
-                  <div className="px-4 pb-6 pt-2">
-                    <div className="bg-blue-600 text-white text-center py-2.5 rounded-xl text-xs font-semibold">
+                  {/* 하단 */}
+                  <div className="px-5 pb-8 pt-1">
+                    <div className="bg-gradient-to-r from-blue-600 to-blue-500 text-white text-center py-3 rounded-xl text-sm font-semibold shadow-lg shadow-blue-500/20">
                       {lang === "ko" ? "전체 영상 보기" : "Watch Full Video"}
                     </div>
                   </div>
@@ -222,58 +207,31 @@ export default function ResultPreview() {
             </div>
           </div>
 
-          {/* ── 우측: 설명 텍스트 + 결과물 구성 + CTA ── */}
-          <div>
-            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
-              {t.resultTitle}
-            </h3>
-
-            {/* 결과물 카드 3개 */}
+          {/* ── 우측: 결과물 구성 + CTA (2/5) ── */}
+          <div className="lg:col-span-2">
+            {/* 결과물 카드 */}
             <div className="space-y-4 mb-8">
-              {/* 예능 본편 */}
-              <div className="flex items-start gap-4 bg-white rounded-xl border border-gray-100 p-4 card-hover">
-                <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-xl shrink-0">
-                  🎬
+              {t.resultItems.map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-4 bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition-shadow duration-300"
+                >
+                  <div className="w-11 h-11 rounded-xl bg-gray-50 flex items-center justify-center text-xl shrink-0">
+                    {item.icon}
+                  </div>
+                  <div>
+                    <p className="font-bold text-gray-900 text-sm">{item.title}</p>
+                    <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">{item.desc}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-semibold text-gray-900 text-sm">{t.resultMain}</p>
-                  <p className="text-gray-500 text-xs mt-0.5">{t.resultMainDesc}</p>
-                </div>
-              </div>
-
-              {/* 하이라이트 숏폼 */}
-              <div className="flex items-start gap-4 bg-white rounded-xl border border-gray-100 p-4 card-hover">
-                <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-xl shrink-0">
-                  📱
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900 text-sm">{t.resultShort}</p>
-                  <p className="text-gray-500 text-xs mt-0.5">{t.resultShortDesc}</p>
-                </div>
-              </div>
-
-              {/* 원클릭 공유 */}
-              <div className="flex items-start gap-4 bg-white rounded-xl border border-gray-100 p-4 card-hover">
-                <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center text-xl shrink-0">
-                  🔗
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900 text-sm">{t.resultShare}</p>
-                  <p className="text-gray-500 text-xs mt-0.5">{t.resultShareDesc}</p>
-                </div>
-              </div>
+              ))}
             </div>
 
-            {/* 가격 안내 + CTA */}
-            <p className="text-sm text-gray-500 mb-4">{t.priceNote}</p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button size="lg" asChild>
-                <Link href="/demo">{t.ctaPrimary}</Link>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <a href="#pricing">{t.ctaSecondary}</a>
-              </Button>
-            </div>
+            {/* 가격 + CTA (사이트 전체 첫 번째 CTA) */}
+            <p className="text-sm text-gray-500 mb-5 font-medium">{t.priceNote}</p>
+            <Button size="lg" asChild className="w-full sm:w-auto">
+              <Link href="/demo">{t.ctaPrimary}</Link>
+            </Button>
           </div>
         </div>
       </div>
