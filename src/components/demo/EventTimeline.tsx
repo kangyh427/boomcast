@@ -3,14 +3,10 @@
  * 파일: src/components/demo/EventTimeline.tsx
  * 설명: 경기 타임라인 컴포넌트 - 화이트 테마
  * 경로: src/components/demo/EventTimeline.tsx
- * 최근 작업: 세션 4 - 화이트 리디자인
- *           - text-gray-300 → text-gray-700 (제목)
- *           - text-white → text-gray-900 (활성 이벤트)
- *           - text-gray-400 → text-gray-500 (일반 이벤트)
- *           - bg-blue-500/20 → bg-blue-50 (활성 배경)
- *           - bg-white/5 → bg-gray-50 (지난 이벤트)
- *           - 카드: 화이트 border 적용
- * 작성일: 2025-03-06
+ * 최근 작업: 세션 7-B
+ *   - useLang() 적용: 제목 한영 전환
+ *   - "경기 타임라인" → 한영 전환
+ * 작성일: 2026-03-07
  * ============================================================
  */
 
@@ -18,6 +14,7 @@
 
 import { MatchEvent } from "@/lib/types";
 import { getEventIcon, getImportanceColor } from "@/lib/demo-data";
+import { useLang } from "@/providers/LanguageProvider";
 
 interface EventTimelineProps {
   events: MatchEvent[];
@@ -25,15 +22,24 @@ interface EventTimelineProps {
   onEventClick: (index: number) => void;
 }
 
+/* ── 한/영 텍스트 ── */
+const text = {
+  ko: { title: "경기 타임라인" },
+  en: { title: "Match Timeline" },
+};
+
 export default function EventTimeline({
   events,
   currentEventIndex,
   onEventClick,
 }: EventTimelineProps) {
+  const { lang } = useLang();
+  const t = text[lang];
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
       <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-        <span>📋</span> 경기 타임라인
+        <span>📋</span> {t.title}
       </h3>
       <div className="space-y-1 max-h-[400px] overflow-y-auto pr-2">
         {events.map((event, index) => {
