@@ -3,10 +3,10 @@
  * 파일: src/components/landing/FAQ.tsx
  * 설명: BoomCast FAQ 아코디언 섹션
  * 경로: src/components/landing/FAQ.tsx
- * 최근 작업: 세션 6 - 신규 생성 (인수인계서 [J-3])
- *   - 6개 FAQ 항목 (한/영)
- *   - 클릭 아코디언 (한 번에 하나만 열림)
- *   - useLang() 적용
+ * 최근 작업: 세션 7-B
+ *   - "무료 체험은 어떻게 하나요?" 항목 삭제
+ *   - → "결제는 어떻게 하나요?" 항목으로 교체
+ *   - 무료 체험 관련 문구 전면 제거
  * 작성일: 2026-03-07
  * ============================================================
  */
@@ -28,7 +28,7 @@ const text = {
   },
 };
 
-/* ── FAQ 데이터 (인수인계서 [J-3]) ── */
+/* ── FAQ 데이터 ── */
 const faqData = {
   ko: [
     {
@@ -48,8 +48,8 @@ const faqData = {
       a: "아닙니다. 공유 링크를 보내면 누구나 시청할 수 있습니다. 팀 전용 페이지는 월간/연간 구독 시 제공됩니다.",
     },
     {
-      q: "무료 체험은 어떻게 하나요?",
-      a: "가입하시면 첫 1경기를 무료로 이용할 수 있습니다. 영상 업로드부터 AI 편집, 완성까지 전체 플로우를 체험해보세요.",
+      q: "결제는 어떻게 하나요?",
+      a: "회원가입 후 원하는 요금제를 선택하시면 됩니다. 단건 구매부터 월간/연간 구독까지 다양한 플랜을 제공하고 있습니다.",
     },
     {
       q: "촬영 중 태깅은 어떻게 하나요?",
@@ -74,8 +74,8 @@ const faqData = {
       a: "No. Anyone can watch via the share link. Team pages are available with Monthly/Annual plans.",
     },
     {
-      q: "How does the free trial work?",
-      a: "Sign up and get your first game free. Experience the full flow from upload to AI editing to finished video.",
+      q: "How do I pay?",
+      a: "Sign up and choose your preferred plan. We offer single game purchases, monthly, and annual subscriptions.",
     },
     {
       q: "How does tagging work during recording?",
