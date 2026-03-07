@@ -1,12 +1,15 @@
 /*
  * ============================================================
  * 파일: src/components/common/Footer.tsx
- * 설명: BoomCast 푸터 - 4컬럼 반응형
+ * 설명: BoomCast 푸터 — 디자인 리뉴얼 v2
  * 경로: src/components/common/Footer.tsx
- * 최근 작업: 세션 7-B
- *   - 하단 언어 전환 버튼(🇰🇷/🇺🇸) UI 삭제 (한국 서비스 우선)
- *   - useLang()은 텍스트 전환용으로 유지
- *   - toggleLang import 제거
+ * 최근 작업: 세션 11 - 미세 조정
+ *   - 로고: gradient-text → 흰색 텍스트 (gradient는 Hero에서만)
+ *   - 배경: gray-50 → 다크 (#0F172A) (Hero, CTA와 톤 일관성)
+ *   - 텍스트: 밝은 계열로 전환 (slate-300, slate-400, slate-500)
+ *   - 소셜 아이콘 호버: gray → blue/red 컬러 전환
+ *   - 구분선: gray-200 → slate-700
+ *   - 언어 전환 UI 버튼 없음 유지
  * 작성일: 2026-03-07
  * ============================================================
  */
@@ -50,6 +53,7 @@ const socialLinks = [
   {
     label: "Instagram",
     href: "https://instagram.com/boomcast",
+    hoverColor: "hover:text-pink-400",
     icon: (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
@@ -59,6 +63,7 @@ const socialLinks = [
   {
     label: "YouTube",
     href: "https://youtube.com/@boomcast",
+    hoverColor: "hover:text-red-400",
     icon: (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
         <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
@@ -71,7 +76,7 @@ export default function Footer() {
   const { lang } = useLang();
 
   return (
-    <footer className="bg-gray-50 border-t border-gray-200">
+    <footer className="bg-[#0F172A]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* 브랜드 영역 */}
@@ -80,9 +85,11 @@ export default function Footer() {
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-amber-500 flex items-center justify-center text-white font-bold text-sm">
                 B
               </div>
-              <span className="text-lg font-bold gradient-text">BoomCast</span>
+              <span className="text-lg font-bold text-white">
+                BoomCast
+              </span>
             </Link>
-            <p className="text-sm text-gray-500 leading-relaxed mb-4">
+            <p className="text-sm text-slate-400 leading-relaxed mb-4">
               {lang === "ko"
                 ? "스마트폰 하나로 동네 축구를 예능 영상으로. AI가 만드는 새로운 스포츠 콘텐츠."
                 : "Turn neighborhood games into entertainment videos with just a smartphone. AI-powered sports content."}
@@ -94,7 +101,7 @@ export default function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  className={`text-slate-500 ${social.hoverColor} transition-colors`}
                   aria-label={social.label}
                 >
                   {social.icon}
@@ -106,7 +113,7 @@ export default function Footer() {
           {/* 링크 섹션 */}
           {footerSections.map((section) => (
             <div key={section.titleKo}>
-              <h3 className="text-sm font-semibold text-gray-900 mb-3">
+              <h3 className="text-sm font-semibold text-slate-200 mb-3">
                 {lang === "ko" ? section.titleKo : section.titleEn}
               </h3>
               <ul className="space-y-2">
@@ -114,7 +121,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                      className="text-sm text-slate-400 hover:text-white transition-colors"
                     >
                       {lang === "ko" ? link.labelKo : link.labelEn}
                     </Link>
@@ -126,10 +133,10 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* ── 하단 바 (언어 전환 버튼 삭제됨) ── */}
-      <div className="border-t border-gray-200">
+      {/* ── 하단 바 ── */}
+      <div className="border-t border-slate-700/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-center">
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-slate-500">
             © 2026 BoomCast. All rights reserved.
           </p>
         </div>
