@@ -3,10 +3,10 @@
  * 파일: src/components/landing/ResultPreview.tsx
  * 설명: AI 결과물 미리보기 섹션 - 사이트 첫 번째 CTA 위치
  * 경로: src/components/landing/ResultPreview.tsx
- * 최근 작업: 세션 6 - 재디자인
- *   - 사이트 전체에서 CTA는 여기 1개 + CTA섹션 1개 = 총 2개
- *   - Vrew 스타일: 좌 폰 프레임 + 우 설명
- *   - 캐스터 탭 전환 (실황/해설/예능)
+ * 최근 작업: 세션 7-B
+ *   - "무료 체험하기" → "체험하기"
+ *   - "Try Free" → "Try It"
+ *   - 무료 관련 문구 전면 삭제
  * 작성일: 2026-03-07
  * ============================================================
  */
@@ -23,7 +23,7 @@ const text = {
   ko: {
     sectionTitle: "AI가 만든 예능 영상,\n미리 보세요",
     sectionSubtitle: "촬영만 하면, 이런 영상이 자동으로 완성됩니다",
-    ctaPrimary: "무료 체험하기",
+    ctaPrimary: "체험하기",
     tabPlayByPlay: "실황",
     tabAnalyst: "해설",
     tabEntertainment: "예능",
@@ -37,7 +37,7 @@ const text = {
   en: {
     sectionTitle: "Preview AI-Created\nEntertainment",
     sectionSubtitle: "Just record the game — videos like these are created automatically",
-    ctaPrimary: "Try Free",
+    ctaPrimary: "Try It",
     tabPlayByPlay: "Play-by-Play",
     tabAnalyst: "Analyst",
     tabEntertainment: "Entertainment",
