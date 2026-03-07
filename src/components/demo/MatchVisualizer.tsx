@@ -3,11 +3,12 @@
  * 파일: src/components/demo/MatchVisualizer.tsx
  * 설명: 경기 비주얼라이저 - 경기장 시뮬레이션 뷰
  * 경로: src/components/demo/MatchVisualizer.tsx
- * 최근 작업: 세션 4 - 화이트 테마 적용
- *           - 프로그레스 바: bg-gray-800 → bg-gray-200
- *           - 외곽 카드: 화이트 border 적용
- *           - 경기장 내부 시뮬레이션은 그대로 유지 (다크 배경이 적절)
- * 작성일: 2025-03-06
+ * 최근 작업: 세션 7-B
+ *   - "AI LIVE" 배지 완전 삭제 (인수인계서 [K] ⚠️1)
+ *   - useLang() 적용: 안내 텍스트 한영 전환
+ *   - REC 표시 유지 (촬영 녹화 의미, "라이브"가 아님)
+ *   - 경기장 시뮬레이션 다크 배경 유지 (경기장 분위기)
+ * 작성일: 2026-03-07
  * ============================================================
  */
 
@@ -15,8 +16,8 @@
 
 import { MatchEvent } from "@/lib/types";
 import { getEventIcon } from "@/lib/demo-data";
-import { Badge } from "@/components/ui/badge";
 import { Smartphone } from "lucide-react";
+import { useLang } from "@/providers/LanguageProvider";
 
 interface MatchVisualizerProps {
   currentEvent: MatchEvent | null;
@@ -24,11 +25,46 @@ interface MatchVisualizerProps {
   progress: number;
 }
 
+/* ── 한/영 텍스트 ── */
+const text = {
+  ko: {
+    phoneDesc: "경기장 중앙에 세워둔 스마트폰",
+    startGuide: "재생 버튼을 눌러 AI 캐스팅을 시작하세요",
+  },
+  en: {
+    phoneDesc: "Smartphone placed at center field",
+    startGuide: "Press play to start AI casting",
+  },
+};
+
+/* ── 이벤트 타입별 오버레이 텍스트 ── */
+const eventOverlayText: Record<string, { ko: string; en: string }> = {
+  goal: { ko: "골!!!", en: "GOAL!!!" },
+  save: { ko: "세이브!", en: "SAVE!" },
+  penalty: { ko: "페널티!", en: "PENALTY!" },
+  card_yellow: { ko: "옐로카드", en: "YELLOW CARD" },
+  card_red: { ko: "레드카드", en: "RED CARD" },
+  half_time: { ko: "하프타임", en: "HALF TIME" },
+  full_time: { ko: "경기 종료", en: "FULL TIME" },
+  kick_off: { ko: "킥오프", en: "KICK OFF" },
+  substitution: { ko: "선수 교체", en: "SUBSTITUTION" },
+};
+
 export default function MatchVisualizer({
   currentEvent,
   isPlaying,
   progress,
 }: MatchVisualizerProps) {
+  const { lang } = useLang();
+  const t = text[lang];
+
+  /* 이벤트 오버레이 텍스트 결정 */
+  const getOverlayText = (event: MatchEvent): string => {
+    const mapped = eventOverlayText[event.type];
+    if (mapped) return mapped[lang];
+    return event.type.toUpperCase().replace("_", " ");
+  };
+
   return (
     <div className="rounded-xl border border-gray-200 shadow-sm overflow-hidden">
       {/* 경기장 시뮬레이션 (다크 배경 유지 - 경기장 분위기) */}
@@ -109,6 +145,7 @@ export default function MatchVisualizer({
           <div className="absolute bottom-8 left-3 w-6 h-6 border-b-2 border-l-2 border-white/40 rounded-bl-sm" />
           <div className="absolute bottom-8 right-3 w-6 h-6 border-b-2 border-r-2 border-white/40 rounded-br-sm" />
 
+          {/* REC 표시 (촬영 녹화 의미 - "라이브"가 아님) */}
           {isPlaying && (
             <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-black/40 px-2 py-1 rounded-full">
               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
@@ -134,16 +171,7 @@ export default function MatchVisualizer({
                   {currentEvent.matchMinute}
                 </div>
                 <div className="text-white font-bold text-base sm:text-lg">
-                  {currentEvent.type === "goal" && "GOAL!!!"}
-                  {currentEvent.type === "save" && "SAVE!"}
-                  {currentEvent.type === "penalty" && "PENALTY!"}
-                  {currentEvent.type === "card_yellow" && "YELLOW CARD"}
-                  {currentEvent.type === "card_red" && "RED CARD"}
-                  {currentEvent.type === "half_time" && "HALF TIME"}
-                  {currentEvent.type === "full_time" && "FULL TIME"}
-                  {currentEvent.type === "kick_off" && "KICK OFF"}
-                  {currentEvent.type === "substitution" && "SUBSTITUTION"}
-                  {!["goal", "save", "penalty", "card_yellow", "card_red", "half_time", "full_time", "kick_off", "substitution"].includes(currentEvent.type) && currentEvent.type.toUpperCase().replace("_", " ")}
+                  {getOverlayText(currentEvent)}
                 </div>
                 {currentEvent.player && (
                   <div className="text-blue-400 text-sm mt-1">
@@ -161,10 +189,10 @@ export default function MatchVisualizer({
             <div className="text-center">
               <Smartphone className="w-12 h-12 mx-auto mb-3 text-white/40" />
               <p className="text-gray-300/80 text-sm font-medium">
-                경기장 중앙에 세워둔 스마트폰
+                {t.phoneDesc}
               </p>
               <p className="text-gray-400/60 text-xs mt-1">
-                재생 버튼을 눌러 AI 캐스팅을 시작하세요
+                {t.startGuide}
               </p>
             </div>
           </div>
@@ -178,15 +206,7 @@ export default function MatchVisualizer({
           <span className="text-xs font-bold text-white/80">BoomCast</span>
         </div>
 
-        {/* AI LIVE badge */}
-        {isPlaying && (
-          <div className="absolute top-3 right-3">
-            <Badge variant="destructive" className="text-[10px] gap-1">
-              <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse" />
-              AI LIVE
-            </Badge>
-          </div>
-        )}
+        {/* AI LIVE 배지 삭제됨 (인수인계서 [K] ⚠️1) */}
       </div>
 
       {/* Progress bar - 화이트 테마 */}
