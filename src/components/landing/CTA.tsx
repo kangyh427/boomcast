@@ -3,10 +3,10 @@
  * 파일: src/components/landing/CTA.tsx
  * 설명: BoomCast 최종 CTA 섹션 - 사이트 두 번째(마지막) CTA
  * 경로: src/components/landing/CTA.tsx
- * 최근 작업: 세션 6 - 문구 수정 + useLang 적용
- *   - "데모 시작하기" → "무료 체험하기"
- *   - "데모를 통해" → "체험을 통해"
- *   - 사이트 전체 CTA 2곳 중 마지막 위치
+ * 최근 작업: 세션 7-B
+ *   - "무료 체험하기" → "시작하기"
+ *   - "첫 경기는 무료입니다" → 서비스 가치 중심 카피
+ *   - 무료 관련 문구 전면 삭제
  * 작성일: 2026-03-07
  * ============================================================
  */
@@ -22,17 +22,17 @@ import { useLang } from "@/providers/LanguageProvider";
 const text = {
   ko: {
     titleBefore: "지금 바로 ",
-    titleHighlight: "체험",
+    titleHighlight: "시작",
     titleAfter: "해보세요",
-    subtitle: "첫 경기는 무료입니다. 동네 축구가 어떻게 예능 콘텐츠로 변하는지, 직접 경험해보세요.",
-    cta: "무료 체험하기",
+    subtitle: "동네 축구가 어떻게 예능 콘텐츠로 변하는지, 직접 경험해보세요.",
+    cta: "시작하기",
   },
   en: {
     titleBefore: "Ready to ",
-    titleHighlight: "Try",
-    titleAfter: " It?",
-    subtitle: "Your first game is free. See how your local soccer transforms into entertainment content.",
-    cta: "Try Free",
+    titleHighlight: "Get Started",
+    titleAfter: "?",
+    subtitle: "See how your local soccer transforms into entertainment content.",
+    cta: "Get Started",
   },
 };
 
