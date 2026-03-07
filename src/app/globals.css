@@ -1,47 +1,82 @@
 /*
  * ============================================================
  * 파일: src/app/globals.css
- * 설명: BoomCast 글로벌 스타일 - 화이트 테마
+ * 설명: BoomCast 글로벌 스타일 — 디자인 리뉴얼 v2
  * 경로: src/app/globals.css
- * 최근 작업: 세션 6 - Pretendard CDN 폰트 적용 강화
- *   - layout.tsx에서 CDN <link> 로드
- *   - font-family에 'Pretendard Variable' 추가
- *   - 기존 애니메이션/유틸리티 유지
+ * 최근 작업: 세션 9 - 디자인 리뉴얼
+ *   - 색상 시스템 확장 (다크 Hero, 섹션별 배경 변주)
+ *   - 스크롤 등장 애니메이션 (.reveal / .reveal-visible)
+ *   - 호버 효과 강화 (translateY -4px + shadow-xl)
+ *   - 다크 섹션용 변수 추가
+ *   - 이모지 → lucide 아이콘 전환을 위한 아이콘 배경 유틸리티
+ *   - Plus Jakarta Sans 웹폰트 추가 (영문)
  * 작성일: 2026-03-07
  * ============================================================
  */
 
 @import "tailwindcss";
 
+/* ── Tailwind 테마 변수 ── */
 @theme inline {
   --color-background: #FFFFFF;
   --color-foreground: #111827;
   --color-primary: #2563EB;
+  --color-primary-dark: #1D4ED8;
   --color-accent: #F59E0B;
   --color-surface: #F9FAFB;
   --color-surface-light: #F3F4F6;
   --color-border: #E5E7EB;
-  --font-sans: 'Pretendard Variable', 'Pretendard', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* 섹션별 배경 변주 색상 */
+  --color-cream: #FFFBF5;
+  --color-slate-bg: #F1F5F9;
+  --color-mint-bg: #ECFDF5;
+  --color-dark-bg: #0F172A;
+  --color-dark-surface: #1E293B;
+
+  --font-sans: 'Pretendard Variable', 'Pretendard', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'Pretendard Variable', system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
 }
 
+/* ── CSS 변수 (컴포넌트에서 직접 참조용) ── */
 :root {
   --background: #FFFFFF;
   --foreground: #111827;
+
+  /* Primary: Blue */
   --primary: #2563EB;
   --primary-hover: #1D4ED8;
   --primary-light: #DBEAFE;
   --primary-glow: rgba(37, 99, 235, 0.15);
+
+  /* Accent: Amber */
   --accent: #F59E0B;
   --accent-light: #FEF3C7;
   --accent-glow: rgba(245, 158, 11, 0.15);
+
+  /* Surface & Border */
   --surface: #F9FAFB;
   --surface-light: #F3F4F6;
   --border: #E5E7EB;
   --border-light: #F3F4F6;
+
+  /* Text */
   --text-primary: #111827;
   --text-secondary: #4B5563;
   --text-muted: #9CA3AF;
+
+  /* 섹션별 배경 */
+  --cream: #FFFBF5;
+  --slate-bg: #F1F5F9;
+  --mint-bg: #ECFDF5;
+
+  /* 다크 섹션 */
+  --dark-bg: #0F172A;
+  --dark-surface: #1E293B;
+  --dark-border: #334155;
+  --dark-text: #F8FAFC;
+  --dark-text-muted: #94A3B8;
 }
 
 body {
@@ -56,9 +91,12 @@ body {
 ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
 
-/* ── 애니메이션 키프레임 ── */
+/* ================================================================
+   애니메이션 키프레임
+   ================================================================ */
+
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes fadeIn {
@@ -66,11 +104,11 @@ body {
   to { opacity: 1; }
 }
 @keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-20px); }
+  from { opacity: 0; transform: translateX(-30px); }
   to { opacity: 1; transform: translateX(0); }
 }
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(20px); }
+  from { opacity: 0; transform: translateX(30px); }
   to { opacity: 1; transform: translateX(0); }
 }
 @keyframes pulse-glow {
@@ -78,26 +116,113 @@ body {
   50% { box-shadow: 0 0 20px var(--primary-glow), 0 0 40px var(--primary-glow); }
 }
 @keyframes typing { from { width: 0; } to { width: 100%; } }
-@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-6px); }
 }
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes bounceSubtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
 
-/* ── 애니메이션 유틸리티 클래스 ── */
+/* ── 페이지 로드 애니메이션 ── */
 .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
 .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
 .animate-slide-in-left { animation: slideInLeft 0.5s ease-out forwards; }
 .animate-slide-in-right { animation: slideInRight 0.5s ease-out forwards; }
 .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 .animate-float { animation: float 3s ease-in-out infinite; }
+.animate-scale-in { animation: scaleIn 0.5s ease-out forwards; }
+.animate-bounce-subtle { animation: bounceSubtle 2s ease-in-out infinite; }
 .animate-shimmer {
   background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.05), transparent);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
 
-/* ── 그라데이션 텍스트 ── */
+/* ================================================================
+   스크롤 등장 애니메이션 (IntersectionObserver 연동)
+   - useInView 훅에서 .reveal-visible 클래스를 토글
+   ================================================================ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 방향 변형 */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal-left.reveal-visible,
+.reveal-right.reveal-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 스케일 변형 */
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal-scale.reveal-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 스태거 딜레이 (자식 요소에 부여) */
+.stagger-1 { transition-delay: 0.1s; }
+.stagger-2 { transition-delay: 0.2s; }
+.stagger-3 { transition-delay: 0.3s; }
+.stagger-4 { transition-delay: 0.4s; }
+.stagger-5 { transition-delay: 0.5s; }
+
+/* 접근성: 모션 감소 설정 시 애니메이션 비활성화 */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-left, .reveal-right, .reveal-scale {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .animate-fade-in-up, .animate-fade-in,
+  .animate-slide-in-left, .animate-slide-in-right,
+  .animate-scale-in { animation: none; opacity: 1; }
+}
+
+/* ================================================================
+   그라데이션 & 시각 효과
+   ================================================================ */
+
+/* Hero 제목 전용 그라데이션 (1회만 사용) */
 .gradient-text {
   background: linear-gradient(135deg, #2563EB, #7C3AED, #F59E0B);
   -webkit-background-clip: text;
@@ -105,21 +230,102 @@ body {
   background-clip: text;
 }
 
-/* ── 글래스 효과 ── */
+/* 글래스 효과 */
 .glass {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(229, 231, 235, 0.8);
 }
 
+/* 다크 글래스 (다크 섹션용) */
+.glass-dark {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+/* 글로우 오브 (Hero 배경 장식) */
+.glow-orb-blue {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.2) 0%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+.glow-orb-amber {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+
 .event-critical { animation: pulse-glow 1.5s ease-in-out infinite; }
 
-/* ── 레이아웃 유틸리티 ── */
+/* ================================================================
+   레이아웃 유틸리티
+   ================================================================ */
+
 .section-padding { padding-top: 5rem; padding-bottom: 5rem; }
-.container-max { max-width: 1280px; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
+@media (min-width: 640px) { .section-padding { padding-top: 6rem; padding-bottom: 6rem; } }
+
+.container-max {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
 @media (min-width: 640px) { .container-max { padding-left: 1.5rem; padding-right: 1.5rem; } }
 @media (min-width: 1024px) { .container-max { padding-left: 2rem; padding-right: 2rem; } }
 
-/* ── 카드 호버 효과 ── */
-.card-hover { transition: all 0.3s ease; }
-.card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 4px 10px -6px rgba(0, 0, 0, 0.04); }
+/* ================================================================
+   카드 & 호버 효과 (디자인 가이드라인 PART 7-2)
+   ================================================================ */
+
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08),
+              0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+/* 아이콘 배경 (이모지 대체) */
+.icon-bg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  width: 3.5rem;
+  height: 3.5rem;
+}
+.icon-bg-lg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.25rem;
+  width: 5rem;
+  height: 5rem;
+}
+
+/* 섹션별 배경 변주 */
+.bg-cream { background-color: var(--cream); }
+.bg-slate-section { background-color: var(--slate-bg); }
+.bg-mint-section { background-color: var(--mint-bg); }
+.bg-dark-section {
+  background-color: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+/* ================================================================
+   버튼 인터랙션 강화
+   ================================================================ */
+
+.btn-hover-arrow .arrow-icon {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-hover-arrow:hover .arrow-icon {
+  transform: translateX(4px);
+}
